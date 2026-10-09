@@ -16,8 +16,8 @@ export function useAutosave(): void {
       pending = false;
       const r = saveAutosave(useEditorStore.getState().history.present);
       const st = useEditorStore.getState();
-      const err = r.ok ? null : (r.error ?? 'Autosave failed.');
-      if (st.autosaveError !== err) st.setAutosaveError(err);
+      const err = r.ok ? null : (r.error ?? { key: 'autosave.failed', params: { name: 'Error' } });
+      if (st.autosaveError?.key !== err?.key) st.setAutosaveError(err);
     };
     const unsub = useEditorStore.subscribe((s, prev) => {
       if (s.history.present === prev.history.present) return;

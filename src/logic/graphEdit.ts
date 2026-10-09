@@ -98,3 +98,18 @@ export function sameGraphContent(a: EditorGraph, b: EditorGraph): boolean {
   const strip = (g: EditorGraph) => JSON.stringify({ n: g.nodes.map(stripTransient), e: g.edges.map((e) => [e.id, e.source, e.sourceHandle, e.target]) });
   return a === b || strip(a) === strip(b);
 }
+
+/** Approximate on-canvas node size, used to keep newly added nodes from stacking on top of each other. */
+export const NODE_W = 260;
+export const NODE_H = 150;
+
+/** Shift `desired` downward until it does not overlap an existing node. */
+export function findFreePosition(nodes: EditorNode[], desired: Position, step = NODE_H + 20, maxTries = 40): Position {
+  let y = desired.y;
+  for (let i = 0; i < maxTries; i++) {
+    const clash = nodes.some((n) => Math.abs(n.position.x - desired.x) < NODE_W && Math.abs(n.position.y - y) < NODE_H);
+    if (!clash) return { x: desired.x, y };
+    y += step;
+  }
+  return { x: desired.x, y };
+}

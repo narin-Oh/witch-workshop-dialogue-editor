@@ -1,3 +1,4 @@
+import { useT } from '../../i18n';
 import { Background, BackgroundVariant, Controls, MarkerType, MiniMap, ReactFlow, useReactFlow, type Edge, type Node } from '@xyflow/react';
 import { useCallback, useEffect, useMemo, useRef, type DragEvent } from 'react';
 import { activeGraphOf } from '../../logic/projectOps';
@@ -14,6 +15,7 @@ const EDGE_COLORS: Record<string, string> = { true: 'rgb(52 117 93)', false: 'rg
 const DEFAULT_EDGE = '#8f84ad';
 
 function EmptyHint() {
+  const t = useT();
   return (
     <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
       <div className="max-w-sm rounded-3xl border border-line bg-panel/90 p-6 text-center shadow-card">
@@ -23,14 +25,15 @@ function EmptyHint() {
           <Star size={22} />
           <Leaf size={22} />
         </div>
-        <h2 className="font-serif text-lg font-bold">A blank page</h2>
-        <p className="mt-1 text-text-sub">Add a Start node from the palette, then drag more notes onto the canvas and link them together.</p>
+        <h2 className="font-serif text-lg font-bold">{t('empty.title')}</h2>
+        <p className="mt-1 text-text-sub">{t('empty.body')}</p>
       </div>
     </div>
   );
 }
 
 export function GraphCanvas() {
+  const t = useT();
   const project = useEditorStore(selectProject);
   const graph = activeGraphOf(project);
   const { onNodesChange, onEdgesChange, onConnect, beginDrag, endDrag, addNode } = useEditorStore.getState();
@@ -108,7 +111,7 @@ export function GraphCanvas() {
         snapToGrid
         snapGrid={[10, 10]}
         connectionRadius={28}
-        aria-label="Dialogue graph canvas"
+        aria-label={t('canvas.aria')}
       >
         <Background variant={BackgroundVariant.Dots} gap={22} size={1.6} color="#d6cde6" />
         <Controls showInteractive={false} position="bottom-left" />

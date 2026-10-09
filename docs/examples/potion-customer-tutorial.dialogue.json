@@ -1,0 +1,376 @@
+{
+  "schemaVersion": 1,
+  "id": "g_848e6f92-ba77-4150-86ac-64900986eb2e",
+  "name": "포션 손님",
+  "startNodeId": "n_e5213417-464d-449c-9b7a-21e3ba7e18d7",
+  "variables": [
+    {
+      "name": "gold",
+      "scope": "global",
+      "valueType": "int",
+      "initial": {
+        "valueType": "int",
+        "intValue": 100,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    },
+    {
+      "name": "reputation",
+      "scope": "global",
+      "valueType": "int",
+      "initial": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "n_e5213417-464d-449c-9b7a-21e3ba7e18d7",
+      "type": "dialogue",
+      "speaker": "미라",
+      "displayName": "미라",
+      "text": "안녕하세요! 기침에 잘 듣는 포션이 있을까요?",
+      "portraitId": "mira",
+      "expression": "worried",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "n_d639be83-e94e-47b5-86f2-0c570c1d757d",
+      "endingName": ""
+    },
+    {
+      "id": "n_d639be83-e94e-47b5-86f2-0c570c1d757d",
+      "type": "choice",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [
+        {
+          "id": "c_2b7f4e79-f6fc-46df-9bbd-37a6519cab05",
+          "text": "기침약을 만들어 드릴게요.",
+          "next": "n_3589f85e-9cdc-412a-ba3c-d34a50a540e7"
+        },
+        {
+          "id": "c_2a9a643b-794e-477a-bf0c-b609a3afa2e5",
+          "text": "특별한 포션을 보여 드릴까요?",
+          "next": "n_3150b963-ab7f-490f-b73e-1b246a6236b8"
+        }
+      ],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "n_3589f85e-9cdc-412a-ba3c-d34a50a540e7",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "gold",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "add",
+      "operand": {
+        "valueType": "int",
+        "intValue": 30,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "n_e4cf290f-09ca-43b9-a8c0-173dc84f083a",
+      "endingName": ""
+    },
+    {
+      "id": "n_e4cf290f-09ca-43b9-a8c0-173dc84f083a",
+      "type": "event",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "GiveItem",
+      "eventParams": [
+        {
+          "key": "itemId",
+          "valueType": "string",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": "cough_potion"
+        },
+        {
+          "key": "amount",
+          "valueType": "int",
+          "intValue": 1,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ],
+      "next": "n_611cbd43-7c33-416e-8fcc-4ec570d278c4",
+      "endingName": ""
+    },
+    {
+      "id": "n_611cbd43-7c33-416e-8fcc-4ec570d278c4",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "기침약 판매"
+    },
+    {
+      "id": "n_3150b963-ab7f-490f-b73e-1b246a6236b8",
+      "type": "condition",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "reputation",
+      "operator": ">=",
+      "compare": {
+        "valueType": "int",
+        "intValue": 3,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "n_e528430d-e825-43ae-8ce5-613c3a7ee213",
+      "nextFalse": "n_41055815-3bc2-427e-ae46-d44fc22776b2",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "n_e528430d-e825-43ae-8ce5-613c3a7ee213",
+      "type": "event",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "OpenShop",
+      "eventParams": [
+        {
+          "key": "shopId",
+          "valueType": "string",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": "secret_shop"
+        }
+      ],
+      "next": "n_712bbb8a-80fa-4b21-bec1-e7283ede2061",
+      "endingName": ""
+    },
+    {
+      "id": "n_712bbb8a-80fa-4b21-bec1-e7283ede2061",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "비밀 상점 개방"
+    },
+    {
+      "id": "n_41055815-3bc2-427e-ae46-d44fc22776b2",
+      "type": "dialogue",
+      "speaker": "루미",
+      "displayName": "루미",
+      "text": "아직 믿을 만한 손님인지 모르겠어요. 다음에 또 오세요.",
+      "portraitId": "",
+      "expression": "neutral",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "n_e9ca8f11-d3c0-4ae6-b178-e4a729893903",
+      "endingName": ""
+    },
+    {
+      "id": "n_e9ca8f11-d3c0-4ae6-b178-e4a729893903",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "정중한 거절"
+    }
+  ]
+}

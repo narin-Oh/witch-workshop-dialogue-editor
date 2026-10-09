@@ -8,7 +8,7 @@ Editor-only data (node positions, selection, Start node, preview values) is **no
 
 ## 1. Export format
 
-Exported via **Export Unity JSON** in the toolbar (one file per dialogue graph, `<name>.dialogue.json`).
+Exported via **Export for Unity** (Korean UI: **Unity 내보내기**) in the toolbar (one file per dialogue graph, `<name>.dialogue.json`).
 Export is **blocked** while the graph has validation errors; warnings can be confirmed. Nodes unreachable from Start are omitted.
 
 ```jsonc

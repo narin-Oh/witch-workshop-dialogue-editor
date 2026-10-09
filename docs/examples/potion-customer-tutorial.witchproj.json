@@ -1,0 +1,261 @@
+{
+  "app": "witch-workshop-dialogue-editor",
+  "formatVersion": 1,
+  "project": {
+    "formatVersion": 1,
+    "id": "p_f9005b53-561b-4268-8a66-7c0d9a92c095",
+    "name": "포션 손님 튜토리얼",
+    "variables": [
+      {
+        "id": "v_8eb7f484-c99f-472a-9756-507738c20535",
+        "name": "gold",
+        "type": "int",
+        "scope": "global",
+        "initialValue": 100
+      },
+      {
+        "id": "v_834f5ff2-9832-47ee-ac0c-2f3763f8e9a0",
+        "name": "reputation",
+        "type": "int",
+        "scope": "global",
+        "initialValue": 0
+      }
+    ],
+    "graphs": [
+      {
+        "id": "g_848e6f92-ba77-4150-86ac-64900986eb2e",
+        "name": "포션 손님",
+        "nodes": [
+          {
+            "id": "n_0617d05e-9456-4fcf-a865-7ac6e8ba1efe",
+            "type": "start",
+            "position": {
+              "x": 80,
+              "y": 160
+            },
+            "data": {
+              "note": ""
+            }
+          },
+          {
+            "id": "n_e5213417-464d-449c-9b7a-21e3ba7e18d7",
+            "type": "dialogue",
+            "position": {
+              "x": 400,
+              "y": 160
+            },
+            "data": {
+              "speaker": "미라",
+              "speakerOverride": "",
+              "text": "안녕하세요! 기침에 잘 듣는 포션이 있을까요?",
+              "portraitId": "mira",
+              "expression": "worried"
+            }
+          },
+          {
+            "id": "n_d639be83-e94e-47b5-86f2-0c570c1d757d",
+            "type": "choice",
+            "position": {
+              "x": 720,
+              "y": 160
+            },
+            "data": {
+              "choices": [
+                {
+                  "id": "c_2b7f4e79-f6fc-46df-9bbd-37a6519cab05",
+                  "text": "기침약을 만들어 드릴게요."
+                },
+                {
+                  "id": "c_2a9a643b-794e-477a-bf0c-b609a3afa2e5",
+                  "text": "특별한 포션을 보여 드릴까요?"
+                }
+              ]
+            }
+          },
+          {
+            "id": "n_3589f85e-9cdc-412a-ba3c-d34a50a540e7",
+            "type": "variable",
+            "position": {
+              "x": 1040,
+              "y": 160
+            },
+            "data": {
+              "variable": "gold",
+              "operation": "add",
+              "value": 30
+            }
+          },
+          {
+            "id": "n_e4cf290f-09ca-43b9-a8c0-173dc84f083a",
+            "type": "event",
+            "position": {
+              "x": 1360,
+              "y": 160
+            },
+            "data": {
+              "eventName": "GiveItem",
+              "params": [
+                {
+                  "id": "x_d2f16722-8185-43ac-aa36-7c37fa1c585a",
+                  "key": "itemId",
+                  "valueType": "string",
+                  "value": "cough_potion"
+                },
+                {
+                  "id": "x_d51458a3-de82-48b6-8d0d-53fd529a8e79",
+                  "key": "amount",
+                  "valueType": "int",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          {
+            "id": "n_611cbd43-7c33-416e-8fcc-4ec570d278c4",
+            "type": "end",
+            "position": {
+              "x": 1680,
+              "y": 160
+            },
+            "data": {
+              "endingName": "기침약 판매"
+            }
+          },
+          {
+            "id": "n_3150b963-ab7f-490f-b73e-1b246a6236b8",
+            "type": "condition",
+            "position": {
+              "x": 1040,
+              "y": 330
+            },
+            "data": {
+              "variable": "reputation",
+              "operator": ">=",
+              "value": 3
+            }
+          },
+          {
+            "id": "n_e528430d-e825-43ae-8ce5-613c3a7ee213",
+            "type": "event",
+            "position": {
+              "x": 1360,
+              "y": 330
+            },
+            "data": {
+              "eventName": "OpenShop",
+              "params": [
+                {
+                  "id": "x_ea2268ec-812e-4fe1-99a8-3c8f74802bad",
+                  "key": "shopId",
+                  "valueType": "string",
+                  "value": "secret_shop"
+                }
+              ]
+            }
+          },
+          {
+            "id": "n_712bbb8a-80fa-4b21-bec1-e7283ede2061",
+            "type": "end",
+            "position": {
+              "x": 1680,
+              "y": 330
+            },
+            "data": {
+              "endingName": "비밀 상점 개방"
+            }
+          },
+          {
+            "id": "n_41055815-3bc2-427e-ae46-d44fc22776b2",
+            "type": "dialogue",
+            "position": {
+              "x": 1360,
+              "y": 500
+            },
+            "data": {
+              "speaker": "루미",
+              "speakerOverride": "",
+              "text": "아직 믿을 만한 손님인지 모르겠어요. 다음에 또 오세요.",
+              "portraitId": "",
+              "expression": "neutral"
+            }
+          },
+          {
+            "id": "n_e9ca8f11-d3c0-4ae6-b178-e4a729893903",
+            "type": "end",
+            "position": {
+              "x": 1680,
+              "y": 500
+            },
+            "data": {
+              "endingName": "정중한 거절"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_34cd9c3e-c4cc-47b7-b0f2-11665d559b2d",
+            "source": "n_0617d05e-9456-4fcf-a865-7ac6e8ba1efe",
+            "sourceHandle": "next",
+            "target": "n_e5213417-464d-449c-9b7a-21e3ba7e18d7"
+          },
+          {
+            "id": "e_d0ac0507-b84e-48b6-b8cc-ece906b15afe",
+            "source": "n_e5213417-464d-449c-9b7a-21e3ba7e18d7",
+            "sourceHandle": "next",
+            "target": "n_d639be83-e94e-47b5-86f2-0c570c1d757d"
+          },
+          {
+            "id": "e_f2f8a920-0bdb-477f-a7d2-5b530849661a",
+            "source": "n_d639be83-e94e-47b5-86f2-0c570c1d757d",
+            "sourceHandle": "choice:c_2b7f4e79-f6fc-46df-9bbd-37a6519cab05",
+            "target": "n_3589f85e-9cdc-412a-ba3c-d34a50a540e7"
+          },
+          {
+            "id": "e_4088fe13-d651-44c0-b5ca-a2dddc4d443f",
+            "source": "n_d639be83-e94e-47b5-86f2-0c570c1d757d",
+            "sourceHandle": "choice:c_2a9a643b-794e-477a-bf0c-b609a3afa2e5",
+            "target": "n_3150b963-ab7f-490f-b73e-1b246a6236b8"
+          },
+          {
+            "id": "e_b35448a4-4ee0-4ecb-b3c5-3debaf642b36",
+            "source": "n_3589f85e-9cdc-412a-ba3c-d34a50a540e7",
+            "sourceHandle": "next",
+            "target": "n_e4cf290f-09ca-43b9-a8c0-173dc84f083a"
+          },
+          {
+            "id": "e_330714fb-3d5a-4ea3-89f5-e7cf49cb1eeb",
+            "source": "n_e4cf290f-09ca-43b9-a8c0-173dc84f083a",
+            "sourceHandle": "next",
+            "target": "n_611cbd43-7c33-416e-8fcc-4ec570d278c4"
+          },
+          {
+            "id": "e_01338ada-c6c1-4e1a-9a08-cb716e100768",
+            "source": "n_3150b963-ab7f-490f-b73e-1b246a6236b8",
+            "sourceHandle": "true",
+            "target": "n_e528430d-e825-43ae-8ce5-613c3a7ee213"
+          },
+          {
+            "id": "e_f205ec1f-da36-4a7b-9d62-02a16924b75c",
+            "source": "n_e528430d-e825-43ae-8ce5-613c3a7ee213",
+            "sourceHandle": "next",
+            "target": "n_712bbb8a-80fa-4b21-bec1-e7283ede2061"
+          },
+          {
+            "id": "e_0739d645-905d-4f7f-9281-1499190f0d75",
+            "source": "n_3150b963-ab7f-490f-b73e-1b246a6236b8",
+            "sourceHandle": "false",
+            "target": "n_41055815-3bc2-427e-ae46-d44fc22776b2"
+          },
+          {
+            "id": "e_bc60d6a3-e346-498d-a197-082a1e10748c",
+            "source": "n_41055815-3bc2-427e-ae46-d44fc22776b2",
+            "sourceHandle": "next",
+            "target": "n_e9ca8f11-d3c0-4ae6-b178-e4a729893903"
+          }
+        ]
+      }
+    ],
+    "activeGraphId": "g_848e6f92-ba77-4150-86ac-64900986eb2e",
+    "previewOverrides": {}
+  }
+}

@@ -2,11 +2,16 @@ import { NODE_TYPES, OPERATORS } from '../model/types';
 import type { EditorEdge, EditorGraph, EditorNode, EditorProject, Value, ValueType, VariableDef } from '../model/types';
 import { isValueOfType } from '../logic/values';
 import { stripTransient } from '../logic/graphEdit';
+import { translate, type Params } from '../i18n/translate';
 
 export const FILE_APP = 'witch-workshop-dialogue-editor';
 export const FORMAT_VERSION = 1;
 
-export class ProjectFileError extends Error {}
+export class ProjectFileError extends Error {
+  constructor(public readonly key: string, public readonly params: Params = {}) {
+    super(translate('en', key, params));
+  }
+}
 
 interface Envelope {
   app: typeof FILE_APP;
@@ -34,45 +39,45 @@ export function serializeProject(p: EditorProject): string {
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 const isStr = (v: unknown): v is string => typeof v === 'string';
 
-function fail(msg: string): never {
-  throw new ProjectFileError(msg);
+function fail(key: string, params?: Params): never {
+  throw new ProjectFileError(key, params);
 }
 
 function checkValueType(t: unknown): ValueType {
   if (t === 'int' || t === 'bool' || t === 'string') return t;
-  return fail(`Unknown value type: ${String(t)}`);
+  return fail('file.unknownValueType', { type: String(t) });
 }
 
 function checkVariable(v: unknown, i: number): VariableDef {
-  if (!isObj(v) || !isStr(v.id) || !isStr(v.name)) return fail(`Variable #${i + 1} is malformed.`);
+  if (!isObj(v) || !isStr(v.id) || !isStr(v.name)) return fail('file.variableMalformed', { n: i + 1 });
   const type = checkValueType(v.type);
-  if (v.scope !== 'global' && v.scope !== 'local') fail(`Variable "${v.name}" has an invalid scope.`);
-  if (!isValueOfType(v.initialValue, type)) fail(`Variable "${v.name}" has an initial value that does not match ${type}.`);
+  if (v.scope !== 'global' && v.scope !== 'local') fail('file.badScope', { name: v.name });
+  if (!isValueOfType(v.initialValue, type)) fail('file.badInitial', { name: v.name, type });
   return { id: v.id, name: v.name, type, scope: v.scope as 'global' | 'local', initialValue: v.initialValue };
 }
 
 function checkNode(n: unknown): EditorNode {
-  if (!isObj(n) || !isStr(n.id) || !isObj(n.position) || !isObj(n.data)) return fail('A node is malformed.');
-  if (!isStr(n.type) || !(NODE_TYPES as readonly string[]).includes(n.type)) return fail(`Unknown node type: ${String(n.type)}`);
+  if (!isObj(n) || !isStr(n.id) || !isObj(n.position) || !isObj(n.data)) return fail('file.nodeMalformed');
+  if (!isStr(n.type) || !(NODE_TYPES as readonly string[]).includes(n.type)) return fail('file.unknownNodeType', { type: String(n.type) });
   const { x, y } = n.position;
-  if (typeof x !== 'number' || typeof y !== 'number') fail(`Node ${n.id} has an invalid position.`);
+  if (typeof x !== 'number' || typeof y !== 'number') fail('file.badPosition', { id: n.id });
   const d = n.data;
-  const need = (...keys: string[]) => keys.forEach((k) => { if (!(k in d)) fail(`Node ${String(n.id)} (${String(n.type)}) is missing "${k}".`); });
+  const need = (...keys: string[]) => keys.forEach((k) => { if (!(k in d)) fail('file.nodeMissingField', { id: String(n.id), type: String(n.type), field: k }); });
   switch (n.type) {
     case 'start': need('note'); break;
     case 'dialogue': need('speaker', 'speakerOverride', 'text', 'portraitId', 'expression'); break;
     case 'choice':
       need('choices');
-      if (!Array.isArray(d.choices) || d.choices.some((c) => !isObj(c) || !isStr(c.id) || !isStr(c.text))) fail(`Node ${n.id} has malformed choices.`);
+      if (!Array.isArray(d.choices) || d.choices.some((c) => !isObj(c) || !isStr(c.id) || !isStr(c.text))) fail('file.badChoices', { id: n.id });
       break;
     case 'condition':
       need('variable', 'operator', 'value');
-      if (!(OPERATORS as readonly string[]).includes(d.operator as string)) fail(`Node ${n.id} has an unknown operator.`);
+      if (!(OPERATORS as readonly string[]).includes(d.operator as string)) fail('file.badOperator', { id: n.id });
       break;
     case 'variable': need('variable', 'operation', 'value'); break;
     case 'event':
       need('eventName', 'params');
-      if (!Array.isArray(d.params) || d.params.some((p) => !isObj(p) || !isStr(p.id) || !isStr(p.key))) fail(`Node ${n.id} has malformed event parameters.`);
+      if (!Array.isArray(d.params) || d.params.some((p) => !isObj(p) || !isStr(p.id) || !isStr(p.key))) fail('file.badParams', { id: n.id });
       break;
     case 'end': need('endingName'); break;
   }
@@ -80,9 +85,9 @@ function checkNode(n: unknown): EditorNode {
 }
 
 function checkGraph(g: unknown): EditorGraph {
-  if (!isObj(g) || !isStr(g.id) || !isStr(g.name) || !Array.isArray(g.nodes) || !Array.isArray(g.edges)) return fail('A graph is malformed.');
+  if (!isObj(g) || !isStr(g.id) || !isStr(g.name) || !Array.isArray(g.nodes) || !Array.isArray(g.edges)) return fail('file.graphMalformed');
   const edges = g.edges.map((e): EditorEdge => {
-    if (!isObj(e) || !isStr(e.id) || !isStr(e.source) || !isStr(e.sourceHandle) || !isStr(e.target)) return fail('An edge is malformed.');
+    if (!isObj(e) || !isStr(e.id) || !isStr(e.source) || !isStr(e.sourceHandle) || !isStr(e.target)) return fail('file.edgeMalformed');
     return { id: e.id, source: e.source, sourceHandle: e.sourceHandle, target: e.target };
   });
   return { id: g.id, name: g.name, nodes: g.nodes.map(checkNode), edges };
@@ -94,14 +99,14 @@ export function parseProject(text: string): EditorProject {
   try {
     raw = JSON.parse(text);
   } catch {
-    return fail('The file is not valid JSON.');
+    return fail('file.notJson');
   }
-  if (!isObj(raw) || raw.app !== FILE_APP) return fail('This is not a Witch Workshop project file.');
-  if (raw.formatVersion !== FORMAT_VERSION) return fail(`Unsupported project format version: ${String(raw.formatVersion)}.`);
+  if (!isObj(raw) || raw.app !== FILE_APP) return fail('file.notProject');
+  if (raw.formatVersion !== FORMAT_VERSION) return fail('file.version', { version: String(raw.formatVersion) });
   const p = raw.project;
-  if (!isObj(p) || !isStr(p.id) || !isStr(p.name) || !Array.isArray(p.variables) || !Array.isArray(p.graphs) || !isStr(p.activeGraphId)) return fail('The project data is malformed.');
+  if (!isObj(p) || !isStr(p.id) || !isStr(p.name) || !Array.isArray(p.variables) || !Array.isArray(p.graphs) || !isStr(p.activeGraphId)) return fail('file.malformed');
   const graphs = p.graphs.map(checkGraph);
-  if (graphs.length === 0) fail('The project has no graphs.');
+  if (graphs.length === 0) fail('file.noGraphs');
   const variables = p.variables.map(checkVariable);
   const overrides: Record<string, Value> = {};
   if (isObj(p.previewOverrides)) {

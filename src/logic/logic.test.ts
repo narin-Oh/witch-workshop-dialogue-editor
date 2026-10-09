@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { evaluateCondition } from './conditions';
 import { applyOperation, initialStore } from './variables';
 import { COALESCE_MS, canRedo, canUndo, commitFrom, createHistory, pushHistory, redo, replacePresent, undo } from './history';
-import { connectNodes, copySelection, deleteSelection, pasteClipboard, pruneEdges, sameGraphContent } from './graphEdit';
+import { connectNodes, copySelection, deleteSelection, findFreePosition, pasteClipboard, pruneEdges, sameGraphContent } from './graphEdit';
 import { newId } from '../model/ids';
 import { vdef, simpleGraph, nodeOf } from '../test.helpers';
 import { GraphBuilder } from '../samples/builder';
@@ -139,5 +139,19 @@ describe('graph editing', () => {
     expect(out.map((e) => e.sourceHandle).sort()).toEqual(handles.sort());
     for (const e of pasted.edges) expect(ids.has(e.source) && ids.has(e.target)).toBe(true);
     expect(sameGraphContent(g, g)).toBe(true);
+  });
+});
+
+describe('findFreePosition', () => {
+  it('keeps a free spot and nudges below overlapping nodes', () => {
+    const g = new GraphBuilder('t').start('s').say('a', 'A', 'x').build();
+    const [s, a] = g.nodes as [typeof g.nodes[number], typeof g.nodes[number]];
+    s.position = { x: 100, y: 100 };
+    a.position = { x: 100, y: 270 };
+    expect(findFreePosition(g.nodes, { x: 600, y: 100 })).toEqual({ x: 600, y: 100 });
+    const p = findFreePosition(g.nodes, { x: 100, y: 100 });
+    expect(p.x).toBe(100);
+    expect(p.y).toBeGreaterThanOrEqual(270 + 150);
+    for (const n of g.nodes) expect(Math.abs(n.position.y - p.y) >= 150 || Math.abs(n.position.x - p.x) >= 260).toBe(true);
   });
 });

@@ -1,6 +1,6 @@
 import { applyEdgeChanges, applyNodeChanges, type EdgeChange, type NodeChange } from '@xyflow/react';
 import { create } from 'zustand';
-import { copySelection, connectNodes, deleteSelection, pasteClipboard, pruneEdges, sameGraphContent, type Clipboard, type Connection } from '../logic/graphEdit';
+import { copySelection, connectNodes, deleteSelection, findFreePosition, pasteClipboard, pruneEdges, sameGraphContent, type Clipboard, type Connection } from '../logic/graphEdit';
 import { COALESCE_MS, commitFrom, createHistory, pushHistory, redo as redoH, replacePresent, undo as undoH, type History } from '../logic/history';
 import { activeGraphOf, newVariable, removeVariable, setPreviewOverride, updateActiveGraph, updateVariable } from '../logic/projectOps';
 import { createGraph, createNode, createProject, defaultNodeData } from '../model/factory';
@@ -8,6 +8,7 @@ import type { EditorEdge, EditorGraph, EditorNode, EditorProject, NodeData, Node
 import { loadAutosave } from '../io/autosave';
 import { createSampleProject } from '../samples';
 import type { LogEntry } from '../preview/runner';
+import { getT, type MessageRef } from '../i18n';
 
 export type BottomTab = 'validation' | 'events';
 export interface Toast {
@@ -26,7 +27,7 @@ interface EditorState {
   bottomTab: BottomTab;
   focusRequest: { nodeId: string; seq: number } | null;
   toast: Toast | null;
-  autosaveError: string | null;
+  autosaveError: MessageRef | null;
   restoredFromAutosave: boolean;
   /** Log of the most recent preview run, shown in the bottom panel. */
   lastRun: LogEntry[];
@@ -37,7 +38,8 @@ interface EditorState {
   onConnect: (c: Connection) => void;
   beginDrag: () => void;
   endDrag: () => void;
-  addNode: (type: NodeType, position?: Position) => void;
+  /** Adds a node (selected afterwards) and returns its id, or null if refused. `avoidOverlap` nudges it off existing nodes. */
+  addNode: (type: NodeType, position?: Position, avoidOverlap?: boolean) => string | null;
   updateNodeData: (id: string, updater: (d: NodeData) => NodeData, coalesceKey?: string) => void;
   deleteSelection: () => void;
   copy: () => void;
@@ -64,7 +66,7 @@ interface EditorState {
   setBottom: (open: boolean, tab?: BottomTab) => void;
   focusNode: (nodeId: string) => void;
   notify: (toast: Toast | null) => void;
-  setAutosaveError: (e: string | null) => void;
+  setAutosaveError: (e: MessageRef | null) => void;
   dismissRestored: () => void;
   setLastRun: (log: LogEntry[]) => void;
 }
@@ -124,16 +126,17 @@ export const useEditorStore = create<EditorState>((set, get) => {
         history: commitFrom(s.history, base, (a, b) => sameGraphContent(activeGraphOf(a), activeGraphOf(b)), now()),
       }));
     },
-    addNode: (type, position) => {
+    addNode: (type, position, avoidOverlap = false) => {
       const g = activeGraphOf(present());
       if (type === 'start' && g.nodes.some((n) => n.type === 'start')) {
-        get().notify({ kind: 'info', text: 'This graph already has a Start node.' });
-        return;
+        get().notify({ kind: 'info', text: getT()('toast.startExists') });
+        return null;
       }
-      // Place near the bottom-right of existing nodes when no position is given.
-      const pos = position ?? (g.nodes.length ? { x: Math.max(...g.nodes.map((n) => n.position.x)) + 320, y: 120 } : { x: 80, y: 120 });
+      const desired = position ?? (g.nodes.length ? { x: Math.max(...g.nodes.map((n) => n.position.x)) + 320, y: 120 } : { x: 80, y: 120 });
+      const pos = avoidOverlap ? findFreePosition(g.nodes, desired) : desired;
       const node = createNode(type, pos);
       commitGraph((gr) => ({ ...gr, nodes: [...gr.nodes.map((n) => (n.selected ? ({ ...n, selected: false } as EditorNode) : n)), { ...node, selected: true } as EditorNode] }));
+      return node.id;
     },
     updateNodeData: (id, updater, key) =>
       commitGraph((g) => {
@@ -145,7 +148,7 @@ export const useEditorStore = create<EditorState>((set, get) => {
       const clip = copySelection(activeGraphOf(present()));
       if (!clip) return;
       set({ clipboard: clip, pasteCount: 0 });
-      get().notify({ kind: 'info', text: `Copied ${clip.nodes.length} node(s).` });
+      get().notify({ kind: 'info', text: getT()('toast.copied', { n: clip.nodes.length }) });
     },
     paste: () => {
       const { clipboard, pasteCount } = get();
@@ -168,14 +171,14 @@ export const useEditorStore = create<EditorState>((set, get) => {
     setOverride: (id, value) => quiet(setPreviewOverride(present(), id, value)),
 
     addGraph: () => {
-      const g = createGraph(`Dialogue ${present().graphs.length + 1}`);
+      const g = createGraph(getT()('default.graphN', { n: present().graphs.length + 1 }));
       commit({ ...present(), graphs: [...present().graphs, g], activeGraphId: g.id });
     },
     renameGraph: (id, name) => commit({ ...present(), graphs: present().graphs.map((g) => (g.id === id ? { ...g, name } : g)) }, `rename:${id}`),
     deleteGraph: (id) => {
       const p = present();
       if (p.graphs.length <= 1) {
-        get().notify({ kind: 'info', text: 'A project needs at least one dialogue graph.' });
+        get().notify({ kind: 'info', text: getT()('toast.lastGraph') });
         return;
       }
       const graphs = p.graphs.filter((g) => g.id !== id);
@@ -184,7 +187,7 @@ export const useEditorStore = create<EditorState>((set, get) => {
     setActiveGraph: (id) => quiet({ ...present(), activeGraphId: id }),
     renameProject: (name) => commit({ ...present(), name }, 'rename-project'),
     loadProject: (p) => reset(p),
-    newProject: () => reset(createProject()),
+    newProject: () => reset(createProject(getT()('default.project'), getT()('default.graph'))),
     loadSamples: () => reset(createSampleProject()),
 
     setPreviewOpen: (open) => set({ previewOpen: open }),

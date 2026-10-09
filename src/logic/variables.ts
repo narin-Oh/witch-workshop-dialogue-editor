@@ -1,19 +1,24 @@
+import { translate, type Params } from '../i18n/translate';
 import type { Value, VariableDef, VariableOperation } from '../model/types';
 import { typeOfValue } from './values';
 
-export class VariableError extends Error {}
+export class VariableError extends Error {
+  constructor(public readonly key: string, public readonly params: Params) {
+    super(translate('en', key, params));
+  }
+}
 
 /** Compute the new value for a variable node operation. Throws VariableError on invalid use. */
 export function applyOperation(current: Value, operation: VariableOperation, operand: Value): Value {
   const ct = typeOfValue(current);
   const ot = typeOfValue(operand);
-  if (ct !== ot) throw new VariableError(`Cannot apply ${ot} value to ${ct} variable`);
+  if (ct !== ot) throw new VariableError('err.operandType', { operand: ot, target: ct });
   switch (operation) {
     case 'set':
       return operand;
     case 'add':
     case 'subtract': {
-      if (ct !== 'int') throw new VariableError(`"${operation}" requires an int variable`);
+      if (ct !== 'int') throw new VariableError('err.intOnly', { op: operation });
       return operation === 'add' ? (current as number) + (operand as number) : (current as number) - (operand as number);
     }
   }

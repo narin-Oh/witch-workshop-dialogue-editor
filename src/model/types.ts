@@ -129,7 +129,11 @@ export interface ValidationIssue {
   id: string;
   severity: Severity;
   code: string;
+  /** English message (for logs/tests). UI renders `t(key, params)` in the user's language. */
   message: string;
+  /** i18n key and parameters for the localized message. */
+  key: string;
+  params: Record<string, string | number>;
   nodeId?: string;
   edgeId?: string;
 }

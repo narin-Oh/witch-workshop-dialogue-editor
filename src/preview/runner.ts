@@ -3,6 +3,9 @@ import { choiceHandle, getTarget, nodeMap } from '../logic/graphUtils';
 import { applyOperation, initialStore, type VariableStore } from '../logic/variables';
 import type { EditorGraph, EditorNode, Value, VariableDef } from '../model/types';
 import { formatValue } from '../logic/values';
+import { translate, type Params } from '../i18n/translate';
+import { ConditionError } from '../logic/conditions';
+import { VariableError } from '../logic/variables';
 
 /** Maximum consecutive non-interactive nodes before the runner assumes an infinite loop. */
 export const MAX_AUTO_STEPS = 200;
@@ -13,7 +16,10 @@ export type LogKind = 'dialogue' | 'choice' | 'condition' | 'variable' | 'event'
 export interface LogEntry {
   kind: LogKind;
   nodeId?: string;
+  /** English message (for tests/logs); the UI renders `t(key, params)`. */
   message: string;
+  key: string;
+  params: Params;
 }
 export interface PreviewEvent {
   name: string;
@@ -36,6 +42,8 @@ export interface PreviewState {
   steps: number;
   endingName?: string;
   error?: string;
+  errorKey?: string;
+  errorParams?: Params;
 }
 
 const blank = (vars: VariableStore): PreviewState => ({
@@ -46,10 +54,10 @@ const blank = (vars: VariableStore): PreviewState => ({
 export function startPreview(graph: EditorGraph, defs: VariableDef[], overrides: Record<string, Value> = {}): PreviewState {
   const state = blank(initialStore(defs, overrides));
   const starts = graph.nodes.filter((n) => n.type === 'start');
-  if (starts.length !== 1) return fail(state, undefined, starts.length ? 'Multiple Start nodes.' : 'No Start node.');
+  if (starts.length !== 1) return fail(state, undefined, starts.length ? 'run.multiStart' : 'run.noStart');
   const start = starts[0] as EditorNode;
   const next = getTarget(graph, start.id, 'next');
-  if (!next) return fail(state, start.id, 'Start is not connected to any node.');
+  if (!next) return fail(state, start.id, 'run.startNotConnected');
   return run(graph, state, next);
 }
 
@@ -57,7 +65,7 @@ export function startPreview(graph: EditorGraph, defs: VariableDef[], overrides:
 export function advance(graph: EditorGraph, state: PreviewState): PreviewState {
   if (state.status !== 'dialogue' || !state.nodeId) return state;
   const next = getTarget(graph, state.nodeId, 'next');
-  if (!next) return fail(state, state.nodeId, 'Dialogue is not connected to a next node.');
+  if (!next) return fail(state, state.nodeId, 'run.dialogueNoNext');
   return run(graph, state, next);
 }
 
@@ -66,15 +74,26 @@ export function choose(graph: EditorGraph, state: PreviewState, choiceId: string
   if (state.status !== 'choice' || !state.nodeId) return state;
   const picked = state.choices.find((c) => c.id === choiceId);
   if (!picked) return state;
-  const logged: PreviewState = { ...state, log: [...state.log, { kind: 'choice', nodeId: state.nodeId, message: `Chose: "${picked.text}"` }] };
+  const logged: PreviewState = { ...state, log: [...state.log, entry('choice', state.nodeId, 'runlog.chose', { text: picked.text })] };
   const next = getTarget(graph, state.nodeId, choiceHandle(choiceId));
-  if (!next) return fail(logged, state.nodeId, `Choice "${picked.text}" is not connected to a node.`);
+  if (!next) return fail(logged, state.nodeId, 'run.choiceNotConnected', { text: picked.text });
   return run(graph, logged, next);
 }
 
-function fail(state: PreviewState, nodeId: string | undefined, message: string): PreviewState {
-  return { ...state, status: 'error', nodeId, choices: [], error: message, log: [...state.log, { kind: 'error', nodeId, message }] };
+function fail(state: PreviewState, nodeId: string | undefined, key: string, params: Params = {}): PreviewState {
+  const message = translate('en', key, params);
+  return {
+    ...state, status: 'error', nodeId, choices: [], error: message, errorKey: key, errorParams: params,
+    log: [...state.log, { kind: 'error', nodeId, message, key, params }],
+  };
 }
+
+const entry = (kind: LogKind, nodeId: string | undefined, key: string, params: Params = {}): LogEntry => ({ kind, nodeId, key, params, message: translate('en', key, params) });
+
+const reasonOf = (e: unknown): Params =>
+  e instanceof ConditionError || e instanceof VariableError
+    ? { reasonKey: e.key, reasonParams: JSON.stringify(e.params) }
+    : { reasonKey: 'err.compareTypes', reasonParams: JSON.stringify({ a: '?', b: '?' }) };
 
 function run(graph: EditorGraph, initial: PreviewState, firstId: string): PreviewState {
   const nodes = nodeMap(graph);
@@ -82,56 +101,56 @@ function run(graph: EditorGraph, initial: PreviewState, firstId: string): Previe
   let id: string | undefined = firstId;
   let auto = 0;
 
-  const log = (kind: LogKind, nodeId: string, message: string) => state.log.push({ kind, nodeId, message });
+  const log = (kind: LogKind, nodeId: string, key: string, params: Params = {}) => state.log.push(entry(kind, nodeId, key, params));
 
   while (id !== undefined) {
     const node = nodes.get(id);
-    if (!node) return fail(state, undefined, `A connection leads to a node that does not exist (${id}).`);
-    if (state.steps >= MAX_TOTAL_STEPS) return fail(state, id, `Stopped after ${MAX_TOTAL_STEPS} steps: possible infinite loop.`);
-    if (auto >= MAX_AUTO_STEPS) return fail(state, id, `Stopped after ${MAX_AUTO_STEPS} automatic steps without player input: infinite loop.`);
+    if (!node) return fail(state, undefined, 'run.missingNode', { id });
+    if (state.steps >= MAX_TOTAL_STEPS) return fail(state, id, 'run.loopTotal', { n: MAX_TOTAL_STEPS });
+    if (auto >= MAX_AUTO_STEPS) return fail(state, id, 'run.loopAuto', { n: MAX_AUTO_STEPS });
     state = { ...state, steps: state.steps + 1 };
 
     switch (node.type) {
       case 'start':
-        return fail(state, id, 'A connection leads back into the Start node.');
+        return fail(state, id, 'run.backToStart');
       case 'dialogue': {
         const speaker = node.data.speakerOverride.trim() || node.data.speaker;
-        log('dialogue', id, `${speaker || '???'}: ${node.data.text}`);
+        log('dialogue', id, 'runlog.dialogue', { speaker: speaker || '???', text: node.data.text });
         return { ...state, status: 'dialogue', nodeId: id, speaker, text: node.data.text, portraitId: node.data.portraitId, expression: node.data.expression, choices: [] };
       }
       case 'choice': {
-        if (node.data.choices.length === 0) return fail(state, id, 'Choice node has no choices.');
-        log('choice', id, `Choices: ${node.data.choices.map((c) => `"${c.text}"`).join(' / ')}`);
+        if (node.data.choices.length === 0) return fail(state, id, 'run.noChoices');
+        log('choice', id, 'runlog.choices', { list: node.data.choices.map((c) => `"${c.text}"`).join(' / ') });
         return { ...state, status: 'choice', nodeId: id, choices: node.data.choices.map((c) => ({ id: c.id, text: c.text })) };
       }
       case 'condition': {
         const left = state.vars[node.data.variable];
-        if (left === undefined) return fail(state, id, `Condition uses undefined variable "${node.data.variable}".`);
+        if (left === undefined) return fail(state, id, 'run.undefinedVarCondition', { name: node.data.variable });
         let result: boolean;
         try {
           result = evaluateCondition(left, node.data.operator, node.data.value);
         } catch (e) {
-          return fail(state, id, `Invalid condition: ${(e as Error).message}.`);
+          return fail(state, id, 'run.invalidCondition', reasonOf(e));
         }
-        log('condition', id, `${node.data.variable} (${formatValue(left)}) ${node.data.operator} ${formatValue(node.data.value)} → ${result}`);
+        log('condition', id, 'runlog.condition', { variable: node.data.variable, left: formatValue(left), op: node.data.operator, right: formatValue(node.data.value), result: String(result) });
         const t = getTarget(graph, id, result ? 'true' : 'false');
-        if (!t) return fail(state, id, `The ${result ? 'True' : 'False'} branch of a condition is not connected.`);
+        if (!t) return fail(state, id, 'run.branchNotConnected', { branchValue: String(result) });
         id = t;
         auto++;
         break;
       }
       case 'variable': {
         const cur = state.vars[node.data.variable];
-        if (cur === undefined) return fail(state, id, `Variable node uses undefined variable "${node.data.variable}".`);
+        if (cur === undefined) return fail(state, id, 'run.undefinedVarNode', { name: node.data.variable });
         try {
           const nv = applyOperation(cur, node.data.operation, node.data.value);
           state.vars[node.data.variable] = nv;
-          log('variable', id, `${node.data.variable}: ${formatValue(cur)} → ${formatValue(nv)} (${node.data.operation} ${formatValue(node.data.value)})`);
+          log('variable', id, 'runlog.variable', { variable: node.data.variable, from: formatValue(cur), to: formatValue(nv), operation: node.data.operation, operand: formatValue(node.data.value) });
         } catch (e) {
-          return fail(state, id, `Invalid variable operation: ${(e as Error).message}.`);
+          return fail(state, id, 'run.invalidOperation', reasonOf(e));
         }
         const t = getTarget(graph, id, 'next');
-        if (!t) return fail(state, id, 'Variable node is not connected to a next node.');
+        if (!t) return fail(state, id, 'run.variableNoNext');
         id = t;
         auto++;
         break;
@@ -140,17 +159,17 @@ function run(graph: EditorGraph, initial: PreviewState, firstId: string): Previe
         const params: Record<string, Value> = {};
         for (const p of node.data.params) params[p.key] = p.value;
         state.events.push({ name: node.data.eventName, params });
-        log('event', id, `Event ${node.data.eventName || '(unnamed)'}(${Object.entries(params).map(([k, v]) => `${k}=${formatValue(v)}`).join(', ')})`);
+        log('event', id, node.data.eventName ? 'runlog.event' : 'runlog.eventUnnamed', { name: node.data.eventName, params: Object.entries(params).map(([k, v]) => `${k}=${formatValue(v)}`).join(', ') });
         const t = getTarget(graph, id, 'next');
-        if (!t) return fail(state, id, 'Event node is not connected to a next node.');
+        if (!t) return fail(state, id, 'run.eventNoNext');
         id = t;
         auto++;
         break;
       }
       case 'end':
-        log('end', id, `Ended${node.data.endingName ? `: ${node.data.endingName}` : ''}`);
+        log('end', id, node.data.endingName ? 'runlog.endNamed' : 'runlog.end', { name: node.data.endingName });
         return { ...state, status: 'finished', nodeId: id, choices: [], endingName: node.data.endingName };
     }
   }
-  return fail(state, undefined, 'Execution ended unexpectedly.');
+  return fail(state, undefined, 'run.unexpectedEnd');
 }

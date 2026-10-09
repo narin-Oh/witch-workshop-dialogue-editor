@@ -41,7 +41,7 @@ export function createGraph(name: string, withStart = true): EditorGraph {
   return { id: newId('g'), name, nodes, edges: [] };
 }
 
-export function createProject(name = 'New Project'): EditorProject {
-  const graph = createGraph('Untitled Dialogue');
+export function createProject(name = 'New Project', graphName = 'Untitled Dialogue'): EditorProject {
+  const graph = createGraph(graphName);
   return { formatVersion: 1, id: newId('p'), name, variables: [], graphs: [graph], activeGraphId: graph.id, previewOverrides: {} };
 }

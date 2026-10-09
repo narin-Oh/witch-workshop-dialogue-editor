@@ -1,4 +1,5 @@
 import type { EditorProject } from '../model/types';
+import type { MessageRef } from '../i18n/translate';
 import { parseProject, serializeProject } from './projectFile';
 
 const KEY = 'witch-workshop:autosave:v1';
@@ -6,7 +7,8 @@ const CORRUPT_KEY = 'witch-workshop:autosave:corrupt';
 
 export interface SaveResult {
   ok: boolean;
-  error?: string;
+  /** Localizable message (key + params). */
+  error?: MessageRef;
 }
 
 function storage(): Storage | null {
@@ -18,12 +20,12 @@ function storage(): Storage | null {
 }
 
 export function saveAutosave(p: EditorProject, store: Storage | null = storage()): SaveResult {
-  if (!store) return { ok: false, error: 'Local storage is unavailable; autosave is off.' };
+  if (!store) return { ok: false, error: { key: 'autosave.unavailable' } };
   try {
     store.setItem(KEY, serializeProject(p));
     return { ok: true };
   } catch (e) {
-    return { ok: false, error: `Autosave failed (${(e as Error).name}). Save the project to a file to avoid losing work.` };
+    return { ok: false, error: { key: 'autosave.failed', params: { name: (e as Error).name } } };
   }
 }
 
