@@ -48,6 +48,7 @@ Details: `Samples~/PotionCustomer/README.md`.
 6. **Persistence:** connect your save system through `IVariableStore`. See [`Documentation~/SaveIntegration.md`](Documentation~/SaveIntegration.md).
 
 Full walkthrough: [`Documentation~/Setup.md`](Documentation~/Setup.md).
+한국어 초보자 가이드 (설치부터 Play까지 전체 흐름): [`Documentation~/GettingStarted_KO.md`](Documentation~/GettingStarted_KO.md).
 
 ## Architecture
 

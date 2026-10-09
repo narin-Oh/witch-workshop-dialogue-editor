@@ -99,7 +99,7 @@ User manual (Korean): [`docs/USER_GUIDE_KO.md`](docs/USER_GUIDE_KO.md) · exampl
 Runtime JSON and C# integration: see [`docs/UNITY_INTEGRATION.md`](docs/UNITY_INTEGRATION.md).
 
 ## Tests
-`npm test` runs Vitest (88 tests): conditions, variables, history (undo/redo/coalescing), graph editing (connect/copy/paste/delete), validation (every issue type), preview runner (branching, conditions, loops, invalid transitions), project file round-trip, autosave failure handling, runtime export schema contract, sample conversations (all endings reachable), the tutorial example from the user guide, i18n dictionaries/coverage/language persistence, backward compatibility with older project files, and theme contrast.
+`npm test` runs Vitest (101 tests): conditions, variables, history (undo/redo/coalescing), graph editing (connect/copy/paste/delete), validation (every issue type), preview runner (branching, conditions, loops, invalid transitions), project file round-trip, autosave failure handling, runtime export schema contract, sample conversations (all endings reachable), the tutorial example from the user guide, i18n dictionaries/coverage/language persistence, backward compatibility with older project files, and theme contrast, Unity-package structure (manifest, assembly definitions, `.meta` files, sample/golden data sync) and documentation links.
 
 ## Known limitations
 * One comparison per Condition node (chain nodes for AND/OR).

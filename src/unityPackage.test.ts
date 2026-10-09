@@ -80,6 +80,6 @@ describe('unity-package structure (sandbox check, not a Unity import)', () => {
   it('documentation links in the package README resolve', () => {
     const readme = read('README.md');
     for (const m of readme.matchAll(/\]\(((?:Documentation~|Samples~)[^)#]+)\)/g)) expect(existsSync(join(root, m[1]!)), m[1]).toBe(true);
-    for (const f of ['Setup', 'CustomUI', 'Portraits', 'Events', 'SaveIntegration', 'Schema', 'TestingStatus']) expect(existsSync(join(root, 'Documentation~', `${f}.md`)), f).toBe(true);
+    for (const f of ['Setup', 'CustomUI', 'Portraits', 'Events', 'SaveIntegration', 'Schema', 'TestingStatus', 'GettingStarted_KO']) expect(existsSync(join(root, 'Documentation~', `${f}.md`)), f).toBe(true);
   });
 });

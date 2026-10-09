@@ -1,5 +1,7 @@
 # Setup guide
 
+> 한국어 단계별 가이드: [GettingStarted_KO.md](GettingStarted_KO.md)
+
 This guide wires the package into an existing scene using the Inspector. Nothing here modifies the package: your game-specific
 UI, sprites and event handlers live in your own project.
 
