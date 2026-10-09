@@ -18,6 +18,18 @@ npm run build      # type-check + production build into dist/
 ```
 Requires Node 18+ (developed on Node 22).
 
+## Unity package
+
+[`unity-package/`](unity-package/README.md) is a Unity 6 (UPM) package that **plays the exported dialogue**: runner, replaceable uGUI/TextMeshPro
+dialogue UI (reuse your own pixel-art panels), portraits with expressions, global/local variables with save-system integration, typed game-event
+handlers, an NPC trigger, samples and tests. It follows the exported schema exactly; a generated golden test suite replays playthroughs recorded
+from this editor's preview runner on the C# engine.
+
+* Install: Package Manager > *Add package from git URL* with `https://github.com/narin-Oh/witch-workshop-dialogue-editor.git?path=/unity-package`, or *Add package from disk* with `unity-package/package.json`.
+* Docs: `unity-package/README.md`, `unity-package/Documentation~/` (setup, custom UI, portraits, events, save integration, schema).
+* **Verification status:** the engine-independent core is tested outside Unity (`dotnet test unity-package/Tests~/DotnetHarness`, 85 tests); the Unity-facing code has **not** been compiled or run in the Unity Editor. See `unity-package/Documentation~/TestingStatus.md`.
+* Maintenance scripts: `npm run export:unity-samples` regenerates the sample dialogues and golden test data from the editor code (a vitest check fails if they are stale); `npm run unity:meta` regenerates the package's `.meta` files.
+
 ## Using the editor
 
 | Area | What it does |

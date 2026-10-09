@@ -3,7 +3,7 @@ using System;
 namespace WitchWorkshop.Dialogue
 {
     // DTOs that mirror the runtime JSON exported by the Witch Workshop web editor (schemaVersion 1).
-    // They are plain [Serializable] classes so UnityEngine.JsonUtility can fill them. Field names MUST match
+    // They are plain [Serializable] classes so Unity's JsonUtility can fill them. Field names MUST match
     // the JSON property names exactly. See Documentation~/Schema.md.
 
     /// <summary>A typed value: read the field that matches <see cref="valueType"/> ("int", "bool" or "string").</summary>

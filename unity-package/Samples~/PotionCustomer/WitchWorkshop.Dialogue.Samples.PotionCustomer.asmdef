@@ -1,0 +1,19 @@
+{
+    "name": "WitchWorkshop.Dialogue.Samples.PotionCustomer",
+    "rootNamespace": "WitchWorkshop.Dialogue.Samples",
+    "references": [
+        "WitchWorkshop.Dialogue.Core",
+        "WitchWorkshop.Dialogue",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

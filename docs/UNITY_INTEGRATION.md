@@ -1,5 +1,9 @@
 # Unity Integration Guide
 
+> **A ready-made Unity package now exists:** see [`unity-package/`](../unity-package/README.md) (runner, UI, portraits, events, save integration, samples, tests).
+> This page remains a compact schema reference and a minimal hand-written sketch for projects that prefer their own implementation.
+> The package's C# data classes are generated against this exact schema and verified by tests.
+
 The editor exports **runtime dialogue JSON** (schema version 1) that Unity can read with `UnityEngine.JsonUtility`.
 Editor-only data (node positions, selection, Start node, preview values) is **not** in this file.
 
