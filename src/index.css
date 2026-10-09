@@ -11,12 +11,12 @@
   --c-text-sub: 112 103 132;  /* #706784 (>=4.5:1 on panel) */
 
   --c-primary: 185 167 230;      --c-primary-soft: 240 235 251; --c-primary-deep: 98 78 160;
-  --c-mint: 169 212 195;         --c-mint-soft: 232 244 239;    --c-mint-deep: 52 117 93;
+  --c-mint: 169 212 195;         --c-mint-soft: 232 244 239;    --c-mint-deep: 42 104 82;
   --c-pink: 242 198 216;         --c-pink-soft: 251 233 240;    --c-pink-deep: 163 62 105;
   --c-blue: 191 215 246;         --c-blue-soft: 233 241 252;    --c-blue-deep: 50 98 156;
   --c-yellow: 246 228 168;       --c-yellow-soft: 252 246 220;  --c-yellow-deep: 137 103 18;
   --c-peach: 245 211 188;        --c-peach-soft: 252 236 224;   --c-peach-deep: 160 88 44;
-  --c-mauve: 211 195 217;        --c-mauve-soft: 241 235 244;   --c-mauve-deep: 112 84 128;
+  --c-mauve: 211 195 217;        --c-mauve-soft: 241 235 244;   --c-mauve-deep: 100 74 118;
 }
 
 html, body, #root { height: 100%; }

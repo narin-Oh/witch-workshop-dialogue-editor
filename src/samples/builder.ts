@@ -48,20 +48,38 @@ export class GraphBuilder {
   }
 }
 
-/** Layered left-to-right layout: column = longest-path depth from Start, rows stacked per column. */
+/**
+ * Layered left-to-right layout: column = longest-path depth from Start (loop-back edges ignored),
+ * rows stacked per column.
+ */
 export function layout(nodes: EditorNode[], edges: EditorEdge[]): void {
-  const depth = new Map<string, number>();
   const start = nodes.find((n) => n.type === 'start') ?? nodes[0];
   if (!start) return;
-  depth.set(start.id, 0);
-  // Relax longest-path depth with a bounded number of passes (cycles can't grow past the node count).
+  const out = new Map<string, string[]>();
+  for (const e of edges) out.set(e.source, [...(out.get(e.source) ?? []), e.target]);
+
+  // DFS to find forward edges (skip back edges that close a loop).
+  const forward: [string, string][] = [];
+  const state = new Map<string, 1 | 2>();
+  const visit = (id: string) => {
+    state.set(id, 1);
+    for (const t of out.get(id) ?? []) {
+      const st = state.get(t);
+      if (st === 1) continue; // back edge
+      forward.push([id, t]);
+      if (!st) visit(t);
+    }
+    state.set(id, 2);
+  };
+  visit(start.id);
+
+  const depth = new Map<string, number>([[start.id, 0]]);
   for (let pass = 0; pass < nodes.length; pass++) {
     let changed = false;
-    for (const e of edges) {
-      const d = depth.get(e.source);
-      if (d === undefined) continue;
-      if ((depth.get(e.target) ?? -1) < d + 1 && d + 1 <= nodes.length) {
-        depth.set(e.target, d + 1);
+    for (const [s, t] of forward) {
+      const d = depth.get(s);
+      if (d !== undefined && (depth.get(t) ?? -1) < d + 1) {
+        depth.set(t, d + 1);
         changed = true;
       }
     }
