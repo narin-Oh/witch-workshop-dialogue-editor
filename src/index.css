@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* RGB triplets so Tailwind alpha modifiers work. */
+  --c-bg: 248 246 251;        /* #F8F6FB */
+  --c-panel: 255 253 251;     /* #FFFDFB */
+  --c-line: 232 225 242;      /* #E8E1F2 */
+  --c-text: 92 83 112;        /* #5C5370 */
+  --c-text-sub: 112 103 132;  /* #706784 (>=4.5:1 on panel) */
+
+  --c-primary: 185 167 230;      --c-primary-soft: 240 235 251; --c-primary-deep: 98 78 160;
+  --c-mint: 169 212 195;         --c-mint-soft: 232 244 239;    --c-mint-deep: 52 117 93;
+  --c-pink: 242 198 216;         --c-pink-soft: 251 233 240;    --c-pink-deep: 163 62 105;
+  --c-blue: 191 215 246;         --c-blue-soft: 233 241 252;    --c-blue-deep: 50 98 156;
+  --c-yellow: 246 228 168;       --c-yellow-soft: 252 246 220;  --c-yellow-deep: 137 103 18;
+  --c-peach: 245 211 188;        --c-peach-soft: 252 236 224;   --c-peach-deep: 160 88 44;
+  --c-mauve: 211 195 217;        --c-mauve-soft: 241 235 244;   --c-mauve-deep: 112 84 128;
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: rgb(var(--c-bg));
+  color: rgb(var(--c-text));
+  font-family: theme('fontFamily.sans');
+  font-size: 14px;
+  line-height: 1.65;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+*:focus-visible { outline: 2px solid rgb(var(--c-primary-deep)); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* React Flow theming */
+.react-flow { --xy-background-color: transparent; }
+.react-flow__edge-path { stroke: #8f84ad; stroke-width: 2; }
+.react-flow__edge.selected .react-flow__edge-path { stroke: rgb(var(--c-primary-deep)); stroke-width: 3; }
+.react-flow__handle { width: 12px; height: 12px; border: 2px solid rgb(var(--c-panel)); background: rgb(var(--c-primary-deep)); transition: transform .12s; }
+.react-flow__handle:hover { transform: scale(1.35); }
+.react-flow__controls, .react-flow__minimap { border-radius: 14px; overflow: hidden; box-shadow: theme('boxShadow.card'); border: 1px solid rgb(var(--c-line)); }
+.react-flow__controls-button { background: rgb(var(--c-panel)); color: rgb(var(--c-text)); border-bottom: 1px solid rgb(var(--c-line)); }
+
+@layer components {
+  .input { @apply w-full rounded-xl border border-line bg-panel px-3 py-2 text-text placeholder:text-text-sub/70 focus:border-primary-deep focus:outline-none focus:ring-2 focus:ring-primary/60; }
+  .label { @apply mb-1 block text-xs font-semibold tracking-wide text-text-sub; }
+}
