@@ -1,0 +1,1413 @@
+{
+  "dialogueFile": "potion-customer.dialogue.json",
+  "dialogueId": "potion-customer",
+  "scenarios": [
+    {
+      "name": "learn the recipe, then sell at full price",
+      "globalOverrides": [],
+      "picks": [
+        0,
+        0,
+        0
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "A cough remedy, please.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Ah... I haven't mastered that recipe yet. A tutor in town would teach me for 50 gold.",
+          "portraitId": "lumi",
+          "expression": "embarrassed",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Pay 50 gold to learn the recipe.",
+            "Tell her to come back later."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Pay 50 gold to learn the recipe.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Recipe learned! Now, where were we?",
+          "portraitId": "lumi",
+          "expression": "excited",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "One Herbal Cough Syrup, fresh from the cauldron. How shall we settle the price?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Thirty gold, as usual.",
+            "Fifteen is fine — a friendly discount.",
+            "Let her haggle."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Thirty gold, as usual.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Thank you! I feel better already.",
+          "portraitId": "mira",
+          "expression": "happy",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Fair Trade"
+        }
+      ],
+      "events": [
+        {
+          "name": "UnlockRecipe",
+          "parameters": [
+            {
+              "key": "recipeId",
+              "valueType": "string",
+              "intValue": 0,
+              "boolValue": false,
+              "stringValue": "herbal_cough_syrup"
+            }
+          ]
+        }
+      ],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 80,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "friendly discount",
+      "globalOverrides": [],
+      "picks": [
+        0,
+        0,
+        1
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "A cough remedy, please.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Ah... I haven't mastered that recipe yet. A tutor in town would teach me for 50 gold.",
+          "portraitId": "lumi",
+          "expression": "embarrassed",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Pay 50 gold to learn the recipe.",
+            "Tell her to come back later."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Pay 50 gold to learn the recipe.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Recipe learned! Now, where were we?",
+          "portraitId": "lumi",
+          "expression": "excited",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "One Herbal Cough Syrup, fresh from the cauldron. How shall we settle the price?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Thirty gold, as usual.",
+            "Fifteen is fine — a friendly discount.",
+            "Let her haggle."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Fifteen is fine — a friendly discount.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 1,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "You are too kind! I will tell everyone about this place.",
+          "portraitId": "mira",
+          "expression": "delighted",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Kindly Discount"
+        }
+      ],
+      "events": [
+        {
+          "name": "UnlockRecipe",
+          "parameters": [
+            {
+              "key": "recipeId",
+              "valueType": "string",
+              "intValue": 0,
+              "boolValue": false,
+              "stringValue": "herbal_cough_syrup"
+            }
+          ]
+        }
+      ],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 65,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 2,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "haggle twice",
+      "globalOverrides": [],
+      "picks": [
+        0,
+        0,
+        2,
+        2
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "A cough remedy, please.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Ah... I haven't mastered that recipe yet. A tutor in town would teach me for 50 gold.",
+          "portraitId": "lumi",
+          "expression": "embarrassed",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Pay 50 gold to learn the recipe.",
+            "Tell her to come back later."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Pay 50 gold to learn the recipe.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Recipe learned! Now, where were we?",
+          "portraitId": "lumi",
+          "expression": "excited",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "One Herbal Cough Syrup, fresh from the cauldron. How shall we settle the price?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Thirty gold, as usual.",
+            "Fifteen is fine — a friendly discount.",
+            "Let her haggle."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Let her haggle.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 2,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Hmm... twenty-five? Please?",
+          "portraitId": "mira",
+          "expression": "hopeful",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Thirty gold, as usual.",
+            "Fifteen is fine — a friendly discount.",
+            "Let her haggle."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Let her haggle.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 2,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Fine — twenty gold and not a coin more!",
+          "portraitId": "mira",
+          "expression": "cheeky",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Hard Bargain"
+        }
+      ],
+      "events": [
+        {
+          "name": "UnlockRecipe",
+          "parameters": [
+            {
+              "key": "recipeId",
+              "valueType": "string",
+              "intValue": 0,
+              "boolValue": false,
+              "stringValue": "herbal_cough_syrup"
+            }
+          ]
+        }
+      ],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 70,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 2,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "cannot afford the recipe",
+      "globalOverrides": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 10,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ],
+      "picks": [
+        0,
+        0
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "A cough remedy, please.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Ah... I haven't mastered that recipe yet. A tutor in town would teach me for 50 gold.",
+          "portraitId": "lumi",
+          "expression": "embarrassed",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Pay 50 gold to learn the recipe.",
+            "Tell her to come back later."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Pay 50 gold to learn the recipe.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Oh dear, my pockets are empty. I can't afford the lesson.",
+          "portraitId": "lumi",
+          "expression": "sad",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Empty Pockets"
+        }
+      ],
+      "events": [],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 10,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "recipe already known, sell at full price",
+      "globalOverrides": [
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        }
+      ],
+      "picks": [
+        0,
+        0
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "A cough remedy, please.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "One Herbal Cough Syrup, fresh from the cauldron. How shall we settle the price?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Thirty gold, as usual.",
+            "Fifteen is fine — a friendly discount.",
+            "Let her haggle."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Thirty gold, as usual.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Thank you! I feel better already.",
+          "portraitId": "mira",
+          "expression": "happy",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Fair Trade"
+        }
+      ],
+      "events": [],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 130,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "decline to learn the recipe",
+      "globalOverrides": [],
+      "picks": [
+        0,
+        1
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "A cough remedy, please.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "Ah... I haven't mastered that recipe yet. A tutor in town would teach me for 50 gold.",
+          "portraitId": "lumi",
+          "expression": "embarrassed",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "Pay 50 gold to learn the recipe.",
+            "Tell her to come back later."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Tell her to come back later.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 1,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Oh... I'll come back another day, then.",
+          "portraitId": "mira",
+          "expression": "sad",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Come Back Later"
+        }
+      ],
+      "events": [],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 100,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "stronger potion without reputation",
+      "globalOverrides": [],
+      "picks": [
+        1
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Do you have anything... stronger?",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 1,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Something with a bit more... kick?",
+          "portraitId": "mira",
+          "expression": "nervous",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "I don't sell those to strangers. Come back when the town knows you.",
+          "portraitId": "lumi",
+          "expression": "stern",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Politely Declined"
+        }
+      ],
+      "events": [],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 100,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "stronger potion with reputation opens the back room",
+      "globalOverrides": [
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 3,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ],
+      "picks": [
+        1
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Do you have anything... stronger?",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 1,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Something with a bit more... kick?",
+          "portraitId": "mira",
+          "expression": "nervous",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You come recommended. Take a look at the back-room shelf.",
+          "portraitId": "lumi",
+          "expression": "smirk",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Back Room Open"
+        }
+      ],
+      "events": [
+        {
+          "name": "OpenShop",
+          "parameters": [
+            {
+              "key": "shopId",
+              "valueType": "string",
+              "intValue": 0,
+              "boolValue": false,
+              "stringValue": "back_room"
+            }
+          ]
+        }
+      ],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 100,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": 3,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "shop is closed",
+      "globalOverrides": [],
+      "picks": [
+        2
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+          "portraitId": "mira",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Lumi",
+          "text": "You've come to the right place, dear. What sort of potion do you need?",
+          "portraitId": "lumi",
+          "expression": "smile",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "A cough remedy, please.",
+            "Do you have anything... stronger?",
+            "Sorry, we are closed today."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Sorry, we are closed today.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 2,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Mira",
+          "text": "Oh! I'm so sorry to have bothered you.",
+          "portraitId": "mira",
+          "expression": "sad",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Turned Away"
+        }
+      ],
+      "events": [],
+      "finalVars": [
+        {
+          "name": "gold",
+          "valueType": "int",
+          "intValue": 100,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "reputation",
+          "valueType": "int",
+          "intValue": -1,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "knowsCoughRecipe",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "haggle",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    }
+  ]
+}

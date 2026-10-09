@@ -1,0 +1,1353 @@
+{
+  "schemaVersion": 1,
+  "id": "potion-customer",
+  "name": "Potion Customer",
+  "startNodeId": "node_001",
+  "variables": [
+    {
+      "name": "gold",
+      "scope": "global",
+      "valueType": "int",
+      "initial": {
+        "valueType": "int",
+        "intValue": 100,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    },
+    {
+      "name": "reputation",
+      "scope": "global",
+      "valueType": "int",
+      "initial": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    },
+    {
+      "name": "knowsCoughRecipe",
+      "scope": "global",
+      "valueType": "bool",
+      "initial": {
+        "valueType": "bool",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    },
+    {
+      "name": "haggle",
+      "scope": "local",
+      "valueType": "int",
+      "initial": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node_001",
+      "type": "dialogue",
+      "speaker": "Mira",
+      "displayName": "Mira",
+      "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
+      "portraitId": "mira",
+      "expression": "worried",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_002",
+      "endingName": ""
+    },
+    {
+      "id": "node_002",
+      "type": "dialogue",
+      "speaker": "Lumi",
+      "displayName": "Lumi",
+      "text": "You've come to the right place, dear. What sort of potion do you need?",
+      "portraitId": "lumi",
+      "expression": "smile",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_003",
+      "endingName": ""
+    },
+    {
+      "id": "node_003",
+      "type": "choice",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [
+        {
+          "id": "choice_001",
+          "text": "A cough remedy, please.",
+          "next": "node_004"
+        },
+        {
+          "id": "choice_002",
+          "text": "Do you have anything... stronger?",
+          "next": "node_031"
+        },
+        {
+          "id": "choice_003",
+          "text": "Sorry, we are closed today.",
+          "next": "node_038"
+        }
+      ],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_004",
+      "type": "condition",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "knowsCoughRecipe",
+      "operator": "==",
+      "compare": {
+        "valueType": "bool",
+        "intValue": 0,
+        "boolValue": true,
+        "stringValue": ""
+      },
+      "nextTrue": "node_005",
+      "nextFalse": "node_020",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_005",
+      "type": "dialogue",
+      "speaker": "Lumi",
+      "displayName": "Lumi",
+      "text": "One Herbal Cough Syrup, fresh from the cauldron. How shall we settle the price?",
+      "portraitId": "lumi",
+      "expression": "smile",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_006",
+      "endingName": ""
+    },
+    {
+      "id": "node_006",
+      "type": "choice",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [
+        {
+          "id": "choice_004",
+          "text": "Thirty gold, as usual.",
+          "next": "node_007"
+        },
+        {
+          "id": "choice_005",
+          "text": "Fifteen is fine — a friendly discount.",
+          "next": "node_010"
+        },
+        {
+          "id": "choice_006",
+          "text": "Let her haggle.",
+          "next": "node_014"
+        }
+      ],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_007",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "gold",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "add",
+      "operand": {
+        "valueType": "int",
+        "intValue": 30,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_008",
+      "endingName": ""
+    },
+    {
+      "id": "node_008",
+      "type": "dialogue",
+      "speaker": "Mira",
+      "displayName": "Mira",
+      "text": "Thank you! I feel better already.",
+      "portraitId": "mira",
+      "expression": "happy",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_009",
+      "endingName": ""
+    },
+    {
+      "id": "node_009",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Fair Trade"
+    },
+    {
+      "id": "node_010",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "gold",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "add",
+      "operand": {
+        "valueType": "int",
+        "intValue": 15,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_011",
+      "endingName": ""
+    },
+    {
+      "id": "node_011",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "reputation",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "add",
+      "operand": {
+        "valueType": "int",
+        "intValue": 2,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_012",
+      "endingName": ""
+    },
+    {
+      "id": "node_012",
+      "type": "dialogue",
+      "speaker": "Mira",
+      "displayName": "Mira",
+      "text": "You are too kind! I will tell everyone about this place.",
+      "portraitId": "mira",
+      "expression": "delighted",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_013",
+      "endingName": ""
+    },
+    {
+      "id": "node_013",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Kindly Discount"
+    },
+    {
+      "id": "node_014",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "haggle",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "add",
+      "operand": {
+        "valueType": "int",
+        "intValue": 1,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_015",
+      "endingName": ""
+    },
+    {
+      "id": "node_015",
+      "type": "condition",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "haggle",
+      "operator": ">=",
+      "compare": {
+        "valueType": "int",
+        "intValue": 2,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "node_017",
+      "nextFalse": "node_016",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_016",
+      "type": "dialogue",
+      "speaker": "Mira",
+      "displayName": "Mira",
+      "text": "Hmm... twenty-five? Please?",
+      "portraitId": "mira",
+      "expression": "hopeful",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_006",
+      "endingName": ""
+    },
+    {
+      "id": "node_017",
+      "type": "dialogue",
+      "speaker": "Mira",
+      "displayName": "Mira",
+      "text": "Fine — twenty gold and not a coin more!",
+      "portraitId": "mira",
+      "expression": "cheeky",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_018",
+      "endingName": ""
+    },
+    {
+      "id": "node_018",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "gold",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "add",
+      "operand": {
+        "valueType": "int",
+        "intValue": 20,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_019",
+      "endingName": ""
+    },
+    {
+      "id": "node_019",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Hard Bargain"
+    },
+    {
+      "id": "node_020",
+      "type": "dialogue",
+      "speaker": "Lumi",
+      "displayName": "Lumi",
+      "text": "Ah... I haven't mastered that recipe yet. A tutor in town would teach me for 50 gold.",
+      "portraitId": "lumi",
+      "expression": "embarrassed",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_021",
+      "endingName": ""
+    },
+    {
+      "id": "node_021",
+      "type": "choice",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [
+        {
+          "id": "choice_007",
+          "text": "Pay 50 gold to learn the recipe.",
+          "next": "node_022"
+        },
+        {
+          "id": "choice_008",
+          "text": "Tell her to come back later.",
+          "next": "node_029"
+        }
+      ],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_022",
+      "type": "condition",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "gold",
+      "operator": ">=",
+      "compare": {
+        "valueType": "int",
+        "intValue": 50,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "node_023",
+      "nextFalse": "node_027",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_023",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "gold",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "subtract",
+      "operand": {
+        "valueType": "int",
+        "intValue": 50,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_024",
+      "endingName": ""
+    },
+    {
+      "id": "node_024",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "knowsCoughRecipe",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "set",
+      "operand": {
+        "valueType": "bool",
+        "intValue": 0,
+        "boolValue": true,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_025",
+      "endingName": ""
+    },
+    {
+      "id": "node_025",
+      "type": "event",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "UnlockRecipe",
+      "eventParams": [
+        {
+          "key": "recipeId",
+          "valueType": "string",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": "herbal_cough_syrup"
+        }
+      ],
+      "next": "node_026",
+      "endingName": ""
+    },
+    {
+      "id": "node_026",
+      "type": "dialogue",
+      "speaker": "Lumi",
+      "displayName": "Lumi",
+      "text": "Recipe learned! Now, where were we?",
+      "portraitId": "lumi",
+      "expression": "excited",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_005",
+      "endingName": ""
+    },
+    {
+      "id": "node_027",
+      "type": "dialogue",
+      "speaker": "Lumi",
+      "displayName": "Lumi",
+      "text": "Oh dear, my pockets are empty. I can't afford the lesson.",
+      "portraitId": "lumi",
+      "expression": "sad",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_028",
+      "endingName": ""
+    },
+    {
+      "id": "node_028",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Empty Pockets"
+    },
+    {
+      "id": "node_029",
+      "type": "dialogue",
+      "speaker": "Mira",
+      "displayName": "Mira",
+      "text": "Oh... I'll come back another day, then.",
+      "portraitId": "mira",
+      "expression": "sad",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_030",
+      "endingName": ""
+    },
+    {
+      "id": "node_030",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Come Back Later"
+    },
+    {
+      "id": "node_031",
+      "type": "dialogue",
+      "speaker": "Mira",
+      "displayName": "Mira",
+      "text": "Something with a bit more... kick?",
+      "portraitId": "mira",
+      "expression": "nervous",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_032",
+      "endingName": ""
+    },
+    {
+      "id": "node_032",
+      "type": "condition",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "reputation",
+      "operator": ">=",
+      "compare": {
+        "valueType": "int",
+        "intValue": 3,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "node_033",
+      "nextFalse": "node_036",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_033",
+      "type": "event",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "OpenShop",
+      "eventParams": [
+        {
+          "key": "shopId",
+          "valueType": "string",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": "back_room"
+        }
+      ],
+      "next": "node_034",
+      "endingName": ""
+    },
+    {
+      "id": "node_034",
+      "type": "dialogue",
+      "speaker": "Lumi",
+      "displayName": "Lumi",
+      "text": "You come recommended. Take a look at the back-room shelf.",
+      "portraitId": "lumi",
+      "expression": "smirk",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_035",
+      "endingName": ""
+    },
+    {
+      "id": "node_035",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Back Room Open"
+    },
+    {
+      "id": "node_036",
+      "type": "dialogue",
+      "speaker": "Lumi",
+      "displayName": "Lumi",
+      "text": "I don't sell those to strangers. Come back when the town knows you.",
+      "portraitId": "lumi",
+      "expression": "stern",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_037",
+      "endingName": ""
+    },
+    {
+      "id": "node_037",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Politely Declined"
+    },
+    {
+      "id": "node_038",
+      "type": "dialogue",
+      "speaker": "Mira",
+      "displayName": "Mira",
+      "text": "Oh! I'm so sorry to have bothered you.",
+      "portraitId": "mira",
+      "expression": "sad",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_039",
+      "endingName": ""
+    },
+    {
+      "id": "node_039",
+      "type": "variable",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "reputation",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "subtract",
+      "operand": {
+        "valueType": "int",
+        "intValue": 1,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_040",
+      "endingName": ""
+    },
+    {
+      "id": "node_040",
+      "type": "end",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Turned Away"
+    }
+  ]
+}

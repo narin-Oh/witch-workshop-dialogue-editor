@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "rootFields": [
+    "schemaVersion",
+    "id",
+    "name",
+    "startNodeId",
+    "variables",
+    "nodes"
+  ],
+  "nodeFields": [
+    "id",
+    "type",
+    "speaker",
+    "displayName",
+    "text",
+    "portraitId",
+    "expression",
+    "choices",
+    "variable",
+    "operator",
+    "compare",
+    "nextTrue",
+    "nextFalse",
+    "operation",
+    "operand",
+    "eventName",
+    "eventParams",
+    "next",
+    "endingName"
+  ],
+  "typedValueFields": [
+    "valueType",
+    "intValue",
+    "boolValue",
+    "stringValue"
+  ],
+  "variableFields": [
+    "name",
+    "scope",
+    "valueType",
+    "initial"
+  ],
+  "choiceFields": [
+    "id",
+    "text",
+    "next"
+  ],
+  "eventParamFields": [
+    "key",
+    "valueType",
+    "intValue",
+    "boolValue",
+    "stringValue"
+  ],
+  "nodeTypes": [
+    "choice",
+    "condition",
+    "dialogue",
+    "end",
+    "event",
+    "variable"
+  ]
+}

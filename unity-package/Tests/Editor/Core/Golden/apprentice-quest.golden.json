@@ -1,0 +1,367 @@
+{
+  "dialogueFile": "apprentice-quest.dialogue.json",
+  "dialogueId": "apprentice-quest",
+  "scenarios": [
+    {
+      "name": "accept the quest",
+      "globalOverrides": [],
+      "picks": [
+        0
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Pip",
+          "text": "Mistress! The moonpetal garden is wilting, and I cannot revive it alone...",
+          "portraitId": "pip",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "I'll help. Let's start now.",
+            "Not today, Pip."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "I'll help. Let's start now.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Pip",
+          "text": "Thank you! Please bring me five moonpetals.",
+          "portraitId": "pip",
+          "expression": "happy",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Quest Accepted"
+        }
+      ],
+      "events": [
+        {
+          "name": "StartQuest",
+          "parameters": [
+            {
+              "key": "questId",
+              "valueType": "string",
+              "intValue": 0,
+              "boolValue": false,
+              "stringValue": "moonpetal_garden"
+            }
+          ]
+        }
+      ],
+      "finalVars": [
+        {
+          "name": "moonpetalQuestStarted",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        },
+        {
+          "name": "moonpetals",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "goldQuest",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "decline the quest",
+      "globalOverrides": [],
+      "picks": [
+        1
+      ],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Pip",
+          "text": "Mistress! The moonpetal garden is wilting, and I cannot revive it alone...",
+          "portraitId": "pip",
+          "expression": "worried",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "choices",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [
+            "I'll help. Let's start now.",
+            "Not today, Pip."
+          ],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "pick",
+          "displayName": "",
+          "text": "Not today, Pip.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 1,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayName": "Pip",
+          "text": "...Okay. I will water them by moonlight, then.",
+          "portraitId": "pip",
+          "expression": "sad",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Declined"
+        }
+      ],
+      "events": [],
+      "finalVars": [
+        {
+          "name": "moonpetalQuestStarted",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "moonpetals",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "goldQuest",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "quest started, not enough petals",
+      "globalOverrides": [
+        {
+          "name": "moonpetalQuestStarted",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        }
+      ],
+      "picks": [],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Pip",
+          "text": "Still a few petals short. Keep searching the forest edge!",
+          "portraitId": "pip",
+          "expression": "hopeful",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Keep Searching"
+        }
+      ],
+      "events": [],
+      "finalVars": [
+        {
+          "name": "moonpetalQuestStarted",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        },
+        {
+          "name": "moonpetals",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "goldQuest",
+          "valueType": "int",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    },
+    {
+      "name": "quest started, enough petals",
+      "globalOverrides": [
+        {
+          "name": "moonpetalQuestStarted",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        },
+        {
+          "name": "moonpetals",
+          "valueType": "int",
+          "intValue": 5,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "goldQuest",
+          "valueType": "int",
+          "intValue": 7,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ],
+      "picks": [],
+      "steps": [
+        {
+          "kind": "line",
+          "displayName": "Pip",
+          "text": "You found them all! The garden is glowing again!",
+          "portraitId": "pip",
+          "expression": "delighted",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "end",
+          "displayName": "",
+          "text": "",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": "Quest Complete"
+        }
+      ],
+      "events": [
+        {
+          "name": "GiveItem",
+          "parameters": [
+            {
+              "key": "itemId",
+              "valueType": "string",
+              "intValue": 0,
+              "boolValue": false,
+              "stringValue": "moonpetal_tea"
+            },
+            {
+              "key": "amount",
+              "valueType": "int",
+              "intValue": 3,
+              "boolValue": false,
+              "stringValue": ""
+            }
+          ]
+        },
+        {
+          "name": "CompleteQuest",
+          "parameters": [
+            {
+              "key": "questId",
+              "valueType": "string",
+              "intValue": 0,
+              "boolValue": false,
+              "stringValue": "moonpetal_garden"
+            }
+          ]
+        },
+        {
+          "name": "ChangeScene",
+          "parameters": [
+            {
+              "key": "sceneName",
+              "valueType": "string",
+              "intValue": 0,
+              "boolValue": false,
+              "stringValue": "workshop_evening"
+            }
+          ]
+        }
+      ],
+      "finalVars": [
+        {
+          "name": "moonpetalQuestStarted",
+          "valueType": "bool",
+          "intValue": 0,
+          "boolValue": true,
+          "stringValue": ""
+        },
+        {
+          "name": "moonpetals",
+          "valueType": "int",
+          "intValue": 5,
+          "boolValue": false,
+          "stringValue": ""
+        },
+        {
+          "name": "goldQuest",
+          "valueType": "int",
+          "intValue": 47,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ]
+    }
+  ]
+}
