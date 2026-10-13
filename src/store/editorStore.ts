@@ -1,6 +1,9 @@
 import { applyEdgeChanges, applyNodeChanges, type EdgeChange, type NodeChange } from '@xyflow/react';
 import { create } from 'zustand';
-import { copySelection, connectNodes, deleteSelection, findFreePosition, pasteClipboard, pruneEdges, sameGraphContent, type Clipboard, type Connection } from '../logic/graphEdit';
+import { copySelection, connectNodes, connectionProblem, deleteSelection, findFreePosition, pasteClipboard, pruneEdges, removeEdges, sameGraphContent, type Clipboard, type Connection } from '../logic/graphEdit';
+import { findNearestInDirection, type Direction } from '../logic/directional';
+import { findEdge, outputHandles } from '../logic/graphUtils';
+import { nodeParams } from '../logic/validation';
 import { COALESCE_MS, commitFrom, createHistory, pushHistory, redo as redoH, replacePresent, undo as undoH, type History } from '../logic/history';
 import { activeGraphOf, newVariable, removeVariable, setPreviewOverride, updateActiveGraph, updateVariable } from '../logic/projectOps';
 import { createGraph, createNode, createProject, defaultNodeData } from '../model/factory';
@@ -15,6 +18,27 @@ export interface Toast {
   kind: 'info' | 'success' | 'error';
   text: string;
 }
+
+/**
+ * A small choice menu over the canvas. `output`: pick which output of the source node to connect to the target
+ * (keyboard connect from a node with several outputs). `edge`: pick which incoming connection of a handle to remove.
+ */
+export type PopoverState =
+  | { kind: 'output'; sourceId: string; targetId: string }
+  | { kind: 'edge'; edgeIds: string[]; point: { x: number; y: number } };
+
+export interface HandleDoubleClick {
+  nodeId: string;
+  type: 'source' | 'target';
+  handleId: string | null | undefined;
+  /** A click-connect gesture was already in progress before this double-click's first click. */
+  hadGesture: boolean;
+  point: { x: number; y: number };
+}
+
+/** The last connection made by click-connect, so a double-click that started with it can undo exactly that. */
+let lastClickConnect: { pre: EditorProject; post: EditorProject; time: number } | null = null;
+const CLICK_CONNECT_WINDOW_MS = 1000;
 
 interface EditorState {
   history: History<EditorProject>;
@@ -31,11 +55,21 @@ interface EditorState {
   restoredFromAutosave: boolean;
   /** Log of the most recent preview run, shown in the bottom panel. */
   lastRun: LogEntry[];
+  popover: PopoverState | null;
 
   // graph editing
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
-  onConnect: (c: Connection) => void;
+  onConnect: (c: Connection, viaClick?: boolean) => void;
+  /** Alt+arrow: connect the single selected node toward `dir`. Returns true if a single node was selected (the key was handled). */
+  connectDirectional: (dir: Direction) => boolean;
+  /** Connect with the existing rules; never silently overwrites a different existing connection (asks first). */
+  applyConnection: (source: string, handle: string, target: string) => void;
+  /** Double-click on a handle: cancel a connection gesture, or remove the connection(s) attached to that handle. */
+  handleDoubleClick: (req: HandleDoubleClick, clearGesture: () => void) => void;
+  removeEdgeIds: (ids: string[]) => void;
+  pickPopover: (itemId: string) => void;
+  closePopover: () => void;
   beginDrag: () => void;
   endDrag: () => void;
   /** Adds a node (selected afterwards) and returns its id, or null if refused. `avoidOverlap` nudges it off existing nodes. */
@@ -104,6 +138,7 @@ export const useEditorStore = create<EditorState>((set, get) => {
     autosaveError: null,
     restoredFromAutosave: boot.restored,
     lastRun: [],
+    popover: null,
 
     onNodesChange: (changes) => {
       // Deletion is handled by deleteSelection() so edges/history stay consistent.
@@ -116,7 +151,93 @@ export const useEditorStore = create<EditorState>((set, get) => {
       if (!relevant.length) return;
       quiet(updateActiveGraph(present(), (g) => ({ ...g, edges: asRf<EditorEdge[]>(applyEdgeChanges(relevant, asRf(g.edges))) })));
     },
-    onConnect: (c) => commitGraph((g) => connectNodes(g, c)),
+    onConnect: (c, viaClick = false) => {
+      const pre = present();
+      commitGraph((g) => connectNodes(g, c));
+      const post = present();
+      lastClickConnect = viaClick && post !== pre ? { pre, post, time: now() } : null;
+    },
+    connectDirectional: (dir) => {
+      const t = getT();
+      const g = activeGraphOf(present());
+      const selected = g.nodes.filter((n) => n.selected);
+      if (selected.length !== 1) return false;
+      const source = selected[0] as EditorNode;
+      const outputs = outputHandles(source);
+      const ref = (n: EditorNode) => t('connect.nodeRef', nodeParams(n));
+      if (outputs.length === 0) {
+        get().notify({ kind: 'info', text: t('connect.noOutputs', { node: ref(source) }) });
+        return true;
+      }
+      const target = findNearestInDirection(g, source.id, dir);
+      if (!target) {
+        get().notify({ kind: 'info', text: t('connect.noTarget', { dir: t(`dir.${dir}`) }) });
+        return true;
+      }
+      if (outputs.length === 1) get().applyConnection(source.id, (outputs[0] as { id: string }).id, target.id);
+      else set({ popover: { kind: 'output', sourceId: source.id, targetId: target.id } });
+      return true;
+    },
+    applyConnection: (source, handle, target) => {
+      const t = getT();
+      const g = activeGraphOf(present());
+      const src = g.nodes.find((n) => n.id === source);
+      const dst = g.nodes.find((n) => n.id === target);
+      if (!src || !dst || connectionProblem(g, { source, sourceHandle: handle, target })) {
+        get().notify({ kind: 'error', text: t('connect.invalid') });
+        return;
+      }
+      const from = t('connect.nodeRef', nodeParams(src));
+      const to = t('connect.nodeRef', nodeParams(dst));
+      const existing = findEdge(g, source, handle);
+      if (existing?.target === target) {
+        get().notify({ kind: 'info', text: t('connect.exists', { from, to }) });
+        return;
+      }
+      if (existing) {
+        const old = g.nodes.find((n) => n.id === existing.target);
+        if (!window.confirm(t('connect.confirmReplace', { from, old: old ? t('connect.nodeRef', nodeParams(old)) : '?', to }))) return;
+      }
+      commitGraph((gr) => connectNodes(gr, { source, sourceHandle: handle, target }));
+      get().notify({ kind: 'info', text: t('connect.connected', { from, to }) });
+    },
+    removeEdgeIds: (ids) => commitGraph((g) => removeEdges(g, ids)),
+    handleDoubleClick: (req, clearGesture) => {
+      const t = getT();
+      clearGesture();
+      if (req.hadGesture) {
+        // A connection gesture was in progress: cancel only that. If the first click of this double-click completed
+        // a click-connection, undo exactly that one; every pre-existing connection stays.
+        const cl = lastClickConnect;
+        lastClickConnect = null;
+        if (cl && now() - cl.time < CLICK_CONNECT_WINDOW_MS && activeGraphOf(present()).edges === activeGraphOf(cl.post).edges) {
+          set((s) => ({ history: { ...undoH(s.history), future: [] } }));
+        }
+        get().notify({ kind: 'info', text: t('connect.cancelled') });
+        return;
+      }
+      const g = activeGraphOf(present());
+      const edges = g.edges.filter((e) => (req.type === 'source' ? e.source === req.nodeId && e.sourceHandle === req.handleId : e.target === req.nodeId));
+      if (edges.length === 0) {
+        get().notify({ kind: 'info', text: t('connect.noEdge') });
+      } else if (edges.length === 1) {
+        const e = edges[0] as EditorEdge;
+        const a = g.nodes.find((n) => n.id === e.source);
+        const b = g.nodes.find((n) => n.id === e.target);
+        get().removeEdgeIds([e.id]);
+        if (a && b) get().notify({ kind: 'info', text: t('connect.disconnected', { from: t('connect.nodeRef', nodeParams(a)), to: t('connect.nodeRef', nodeParams(b)) }) });
+      } else {
+        set({ popover: { kind: 'edge', edgeIds: edges.map((e) => e.id), point: req.point } });
+      }
+    },
+    pickPopover: (itemId) => {
+      const p = get().popover;
+      set({ popover: null });
+      if (!p) return;
+      if (p.kind === 'output') get().applyConnection(p.sourceId, itemId, p.targetId);
+      else if (p.edgeIds.includes(itemId)) get().removeEdgeIds([itemId]);
+    },
+    closePopover: () => set({ popover: null }),
     beginDrag: () => set({ dragBase: present() }),
     endDrag: () => {
       const base = get().dragBase;

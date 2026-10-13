@@ -1,5 +1,5 @@
 import { useT } from '../../i18n';
-import { Background, BackgroundVariant, Controls, MarkerType, MiniMap, ReactFlow, useReactFlow, type Edge, type Node } from '@xyflow/react';
+import { Background, BackgroundVariant, Controls, MarkerType, MiniMap, ReactFlow, useReactFlow, useStoreApi, type Edge, type Node } from '@xyflow/react';
 import { useCallback, useEffect, useMemo, useRef, type DragEvent } from 'react';
 import { activeGraphOf } from '../../logic/projectOps';
 import type { NodeType } from '../../model/types';
@@ -8,6 +8,7 @@ import { selectProject, useEditorStore } from '../../store/editorStore';
 import { Leaf, Moon, Sparkle, Star } from '../ui/Motifs';
 import { NODE_META } from './nodeMeta';
 import { nodeTypes } from './NodeCard';
+import { ConnectionPopover } from './ConnectionPopover';
 
 export const PALETTE_MIME = 'application/x-witch-node';
 
@@ -39,6 +40,7 @@ export function GraphCanvas() {
   const { onNodesChange, onEdgesChange, onConnect, beginDrag, endDrag, addNode } = useEditorStore.getState();
   const focusRequest = useEditorStore((s) => s.focusRequest);
   const rf = useReactFlow();
+  const rfStore = useStoreApi();
   const wrapRef = useRef<HTMLDivElement>(null);
 
   // On opening a graph: fit it if it fits at a readable zoom, otherwise start at the Start node.
@@ -100,7 +102,7 @@ export function GraphCanvas() {
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={(c) => c.source && c.target && onConnect({ source: c.source, sourceHandle: c.sourceHandle ?? 'next', target: c.target })}
+        onConnect={(c) => c.source && c.target && onConnect({ source: c.source, sourceHandle: c.sourceHandle ?? 'next', target: c.target }, rfStore.getState().connectionClickStartHandle != null)}
         onNodeDragStart={beginDrag}
         onNodeDragStop={endDrag}
         onSelectionDragStart={beginDrag}
@@ -127,6 +129,7 @@ export function GraphCanvas() {
           }}
         />
       </ReactFlow>
+      <ConnectionPopover />
     </div>
   );
 }

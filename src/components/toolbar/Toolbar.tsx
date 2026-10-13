@@ -1,7 +1,7 @@
 import { canRedo, canUndo } from '../../logic/history';
 import { activeGraphOf } from '../../logic/projectOps';
 import { errorsOf, validateGraph } from '../../logic/validation';
-import { downloadText, pickTextFile, slugify } from '../../io/files';
+import { pickTextFile, saveTextFile, slugify, type SaveOutcome } from '../../io/files';
 import { parseProject, ProjectFileError, serializeProject } from '../../io/projectFile';
 import { exportRuntime, runtimeToJson } from '../../io/runtimeExport';
 import { getT, useLang, useT } from '../../i18n';
@@ -9,12 +9,25 @@ import { selectProject, useEditorStore } from '../../store/editorStore';
 import { Button, IconButton } from '../ui/primitives';
 import { IconExport, IconOpen, IconPlay, IconRedo, IconSave, IconUndo, Logo, Sparkle } from '../ui/Motifs';
 
-export function saveProjectFile(): void {
+/** Shows the result of a save. Cancelling the dialog is silent: no message, nothing changes. */
+function reportSave(outcome: SaveOutcome, savedKey: string, downloadKey: string, params: Record<string, string> = {}): void {
   const t = getT();
   const st = useEditorStore.getState();
-  const p = st.history.present;
-  downloadText(`${slugify(p.name, 'witch-workshop')}.witchproj.json`, serializeProject(p));
-  st.notify({ kind: 'success', text: t('toast.saved') });
+  if (outcome.status === 'cancelled') return;
+  if (outcome.status === 'failed') st.notify({ kind: 'error', text: t('toast.saveFailed', { reason: outcome.reason }) });
+  else st.notify({ kind: 'success', text: t(outcome.status === 'saved' ? savedKey : downloadKey, { ...params, name: outcome.name }) });
+}
+
+/** Save the project; the user picks the location and filename where the browser supports it. */
+export async function saveProjectFile(): Promise<void> {
+  const p = useEditorStore.getState().history.present;
+  const outcome = await saveTextFile({
+    suggestedName: `${slugify(p.name, 'witch-workshop')}.witchproj.json`,
+    text: serializeProject(p),
+    description: 'Witch Workshop project',
+    extension: '.witchproj.json',
+  });
+  reportSave(outcome, 'toast.savedAs', 'toast.savedDownload');
 }
 
 async function openProjectFile(): Promise<void> {
@@ -31,7 +44,7 @@ async function openProjectFile(): Promise<void> {
 }
 
 /** Export the active graph for Unity. Blocked while the graph has validation errors. */
-export function exportUnity(): void {
+export async function exportUnity(): Promise<void> {
   const t = getT();
   const st = useEditorStore.getState();
   const p = st.history.present;
@@ -45,12 +58,20 @@ export function exportUnity(): void {
   }
   const warnings = issues.length;
   if (warnings && !window.confirm(t('confirm.exportWarnings', { n: warnings }))) return;
+  let text: string;
   try {
-    downloadText(`${slugify(g.name, 'dialogue')}.dialogue.json`, runtimeToJson(exportRuntime(g, p.variables)));
-    st.notify({ kind: 'success', text: t('toast.exported', { name: g.name }) });
-  } catch (e) {
+    text = runtimeToJson(exportRuntime(g, p.variables));
+  } catch {
     st.notify({ kind: 'error', text: t('toast.exportFailed') });
+    return;
   }
+  const outcome = await saveTextFile({
+    suggestedName: `${slugify(g.name, 'dialogue')}.dialogue.json`,
+    text,
+    description: 'Witch Workshop dialogue (Unity)',
+    extension: '.dialogue.json',
+  });
+  reportSave(outcome, 'toast.exportedAs', 'toast.exportedDownload', { graph: g.name });
 }
 
 export function Toolbar() {

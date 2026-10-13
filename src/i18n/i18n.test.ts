@@ -50,6 +50,7 @@ describe('key usage', () => {
     for (const o of ['set', 'add', 'subtract']) expect(`var.op.${o}` in en).toBe(true);
     for (const k of ['dialogue', 'choice', 'condition', 'variable', 'event', 'end', 'error']) expect(`logkind.${k}` in en).toBe(true);
     for (const l of ['ko', 'en']) expect(`lang.${l}` in en).toBe(true);
+    for (const d of ['up', 'down', 'left', 'right']) expect(`dir.${d}` in en).toBe(true);
   });
   it('every validation / runner / file / error key referenced by logic exists', () => {
     const logic = sourceFiles.filter((f) => /\/(logic|preview|io)\//.test(f));

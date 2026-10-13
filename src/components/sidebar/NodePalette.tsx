@@ -36,6 +36,7 @@ export function NodePalette() {
   return (
     <Section title={t('palette.title')} icon={<Scroll size={18} />}>
       <p className="mb-2 text-xs text-text-sub">{t('palette.hint')}</p>
+      <p className="mb-2 text-xs text-text-sub">{t('palette.shortcuts')}</p>
       <ul className="grid grid-cols-2 gap-2">
         {PALETTE_ORDER.map((tp) => {
           const m = NODE_META[tp];

@@ -50,7 +50,9 @@ Start (mint) · Dialogue (lavender) · Choice (yellow, one output per choice) ·
 
 ### Shortcuts
 <kbd>Ctrl/⌘</kbd>+<kbd>C</kbd> copy · <kbd>V</kbd> paste · <kbd>D</kbd> duplicate · <kbd>Z</kbd> undo · <kbd>Shift+Z</kbd>/<kbd>Y</kbd> redo · <kbd>S</kbd> save project · <kbd>Delete</kbd> remove selection · <kbd>Esc</kbd> close preview.
+<kbd>Alt</kbd>+<kbd>←↑→↓</kbd> connect the selected node to the nearest node in that direction (Choice/Condition nodes ask which output; replacing an existing connection asks first). **Double-click a handle** to remove just its connection (a menu appears if an input has several; during a click-to-connect gesture it only cancels the gesture). Both are undoable.
 Shortcuts are ignored while typing in a field. The Start node cannot be copied (one per graph).
+Save and Export for Unity open a "Save as" dialog (choose folder and name; `.witchproj.json` / `.dialogue.json`) in browsers that support `showSaveFilePicker` (Chrome, Edge); cancelling leaves everything unchanged. Other browsers fall back to a normal download.
 Undo is predictable: a drag is one step, rapid typing in one field is one step, each structural change is one step.
 
 ### Language (Korean / English)

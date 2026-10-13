@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
+import type { Direction } from '../logic/directional';
 import { useEditorStore } from '../store/editorStore';
+
+const ARROWS: Record<string, Direction | undefined> = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
 
 function isTyping(t: EventTarget | null): boolean {
   const el = t as HTMLElement | null;
@@ -12,7 +15,7 @@ export function useShortcuts(onSave: () => void): void {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const st = useEditorStore.getState();
-      if (st.previewOpen) return;
+      if (st.previewOpen || st.popover) return;
       const mod = e.ctrlKey || e.metaKey;
       const k = e.key.toLowerCase();
       if (mod && k === 's') {
@@ -21,6 +24,11 @@ export function useShortcuts(onSave: () => void): void {
         return;
       }
       if (isTyping(e.target)) return;
+      // Alt + arrow: connect the single selected node toward that direction (never while editing text).
+      if (e.altKey && !mod && !e.shiftKey && ARROWS[e.key]) {
+        if (st.connectDirectional(ARROWS[e.key] as Direction)) e.preventDefault(); // also blocks the browser's Alt+Left/Right "back"
+        return;
+      }
       if (mod && k === 'z') {
         e.preventDefault();
         if (e.shiftKey) st.redo();

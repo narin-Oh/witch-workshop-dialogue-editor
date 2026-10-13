@@ -8,18 +8,34 @@ export interface Connection {
   target: string;
 }
 
-/** Add a connection. Each output handle holds at most one edge (a new one replaces the old). Returns the same graph if invalid. */
-export function connectNodes(graph: EditorGraph, c: Connection): EditorGraph {
+export type ConnectionProblem = 'missing-node' | 'into-start' | 'bad-output';
+
+/** The rules for a legal connection (shared by drag, click and keyboard connecting). Returns the problem, or null if allowed. */
+export function connectionProblem(graph: EditorGraph, c: Connection): ConnectionProblem | null {
   const nodes = nodeMap(graph);
   const src = nodes.get(c.source);
   const dst = nodes.get(c.target);
-  if (!src || !dst || dst.type === 'start') return graph;
-  if (!outputHandles(src).some((h) => h.id === c.sourceHandle)) return graph;
+  if (!src || !dst) return 'missing-node';
+  if (dst.type === 'start') return 'into-start';
+  if (!outputHandles(src).some((h) => h.id === c.sourceHandle)) return 'bad-output';
+  return null;
+}
+
+/** Add a connection. Each output handle holds at most one edge (a new one replaces the old). Returns the same graph if invalid. */
+export function connectNodes(graph: EditorGraph, c: Connection): EditorGraph {
+  if (connectionProblem(graph, c)) return graph;
   const existing = findEdge(graph, c.source, c.sourceHandle);
   if (existing && existing.target === c.target) return graph;
   const edges = graph.edges.filter((e) => !(e.source === c.source && e.sourceHandle === c.sourceHandle));
   edges.push({ id: newId('e'), source: c.source, sourceHandle: c.sourceHandle, target: c.target });
   return { ...graph, edges };
+}
+
+/** Remove the given edges only (never nodes). Returns the same graph if none matched. */
+export function removeEdges(graph: EditorGraph, ids: string[]): EditorGraph {
+  const drop = new Set(ids);
+  const edges = graph.edges.filter((e) => !drop.has(e.id));
+  return edges.length === graph.edges.length ? graph : { ...graph, edges };
 }
 
 /** Drop edges whose endpoints or source handle no longer exist (e.g. after deleting a choice). */

@@ -1,5 +1,7 @@
 import { useT } from '../../i18n';
-import { Handle, Position, type NodeProps } from '@xyflow/react';
+import { Handle, Position, useNodeId, useStoreApi, type HandleProps, type NodeProps } from '@xyflow/react';
+import type { HTMLAttributes } from 'react';
+import { useEditorStore } from '../../store/editorStore';
 import { memo, type ReactNode } from 'react';
 import { choiceHandle } from '../../logic/graphUtils';
 import { formatValue } from '../../logic/values';
@@ -7,6 +9,37 @@ import type { EditorNode, NodeType } from '../../model/types';
 import { IconError, IconWarn } from '../ui/Motifs';
 import { useValidation } from '../validation/ValidationContext';
 import { NODE_META } from './nodeMeta';
+
+/** Whether a click-connect gesture was in progress before the current click sequence began (set on the first click). */
+let gestureBeforeClick = false;
+
+/**
+ * A React Flow Handle that also supports double-click: cancel a connection gesture in progress, or remove the
+ * connection(s) attached to this handle (the node is never deleted). Single click and drag keep React Flow's behaviour.
+ */
+function NodeHandle(props: HandleProps & Omit<HTMLAttributes<HTMLDivElement>, 'id'>) {
+  const rf = useStoreApi();
+  const nodeId = useNodeId();
+  return (
+    <Handle
+      {...props}
+      onClickCapture={(e) => {
+        if (e.detail <= 1) gestureBeforeClick = rf.getState().connectionClickStartHandle != null;
+      }}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        if (!nodeId) return;
+        useEditorStore.getState().handleDoubleClick(
+          { nodeId, type: props.type, handleId: props.id, hadGesture: gestureBeforeClick, point: { x: e.clientX, y: e.clientY } },
+          () => {
+            rf.getState().cancelConnection();
+            rf.setState({ connectionClickStartHandle: null });
+          },
+        );
+      }}
+    />
+  );
+}
 
 type Data<T extends NodeType> = Extract<EditorNode, { type: T }>['data'];
 
@@ -43,7 +76,7 @@ function Shell({ id, type, selected, children, input = true }: { id: string; typ
         </span>
       </div>
       <div className="px-3 pb-3 text-[13px] leading-snug text-text">{children}</div>
-      {input && <Handle type="target" position={Position.Left} id="in" aria-label={t('handle.in')} />}
+      {input && <NodeHandle type="target" position={Position.Left} id="in" aria-label={t('handle.in')} />}
     </div>
   );
 }
@@ -51,7 +84,7 @@ function Shell({ id, type, selected, children, input = true }: { id: string; typ
 const Muted = ({ children }: { children: ReactNode }) => <span className="italic text-text-sub">{children}</span>;
 const Out = ({ id = 'next' }: { id?: string }) => {
   const t = useT();
-  return <Handle type="source" position={Position.Right} id={id} aria-label={t('handle.next')} />;
+  return <NodeHandle type="source" position={Position.Right} id={id} aria-label={t('handle.next')} />;
 };
 
 function StartNode({ id, selected }: NodeProps) {
@@ -92,7 +125,7 @@ function ChoiceNode({ id, selected, data }: NodeProps) {
           <li key={c.id} className="relative flex items-start gap-2 border-t border-yellow/70 px-3 py-1.5">
             <span className="mt-px inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-yellow text-[11px] font-bold text-yellow-deep">{i + 1}</span>
             <span className="line-clamp-2 pr-2">{c.text || <Muted>{t('card.emptyChoice')}</Muted>}</span>
-            <Handle type="source" position={Position.Right} id={choiceHandle(c.id)} aria-label={t('handle.choice', { n: i + 1 })} />
+            <NodeHandle type="source" position={Position.Right} id={choiceHandle(c.id)} aria-label={t('handle.choice', { n: i + 1 })} />
           </li>
         ))}
         {d.choices.length === 0 && <li className="px-3 py-2"><Muted>{t('card.noChoices')}</Muted></li>}
@@ -110,11 +143,11 @@ function ConditionNode({ id, selected, data }: NodeProps) {
       <div className="-mx-3 -mb-3 mt-2">
         <div className="relative flex items-center justify-end gap-2 border-t border-blue/70 px-3 py-1.5 text-xs font-bold text-mint-deep">
           {t('card.true')}
-          <Handle type="source" position={Position.Right} id="true" style={{ background: 'rgb(var(--c-mint-deep))' }} aria-label={t('card.true')} />
+          <NodeHandle type="source" position={Position.Right} id="true" style={{ background: 'rgb(var(--c-mint-deep))' }} aria-label={t('card.true')} />
         </div>
         <div className="relative flex items-center justify-end gap-2 rounded-b-2xl border-t border-blue/70 px-3 py-1.5 text-xs font-bold text-pink-deep">
           {t('card.false')}
-          <Handle type="source" position={Position.Right} id="false" style={{ background: 'rgb(var(--c-pink-deep))' }} aria-label={t('card.false')} />
+          <NodeHandle type="source" position={Position.Right} id="false" style={{ background: 'rgb(var(--c-pink-deep))' }} aria-label={t('card.false')} />
         </div>
       </div>
     </Shell>
