@@ -1,0 +1,8 @@
+node_modules
+dist
+*.tsbuildinfo
+.DS_Store
+
+# .NET harness output
+unity-package/**/bin/
+unity-package/**/obj/

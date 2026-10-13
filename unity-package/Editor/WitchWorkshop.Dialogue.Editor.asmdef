@@ -1,0 +1,21 @@
+{
+    "name": "WitchWorkshop.Dialogue.Editor",
+    "rootNamespace": "WitchWorkshop.Dialogue.Editor",
+    "references": [
+        "WitchWorkshop.Dialogue.Core",
+        "WitchWorkshop.Dialogue",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

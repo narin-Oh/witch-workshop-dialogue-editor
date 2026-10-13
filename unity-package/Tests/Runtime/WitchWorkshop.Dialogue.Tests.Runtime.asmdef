@@ -1,0 +1,25 @@
+{
+    "name": "WitchWorkshop.Dialogue.Tests.Runtime",
+    "rootNamespace": "WitchWorkshop.Dialogue.Tests",
+    "references": [
+        "WitchWorkshop.Dialogue.Core",
+        "WitchWorkshop.Dialogue",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

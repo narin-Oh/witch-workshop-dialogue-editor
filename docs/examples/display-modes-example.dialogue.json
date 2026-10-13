@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "id": "g_73be8def-1b6d-4964-9efd-eb9f76a01cde",
+  "name": "표시 방식 예시",
+  "startNodeId": "n_3b2fb02d-4c95-4f25-9b67-94d276f309e7",
+  "variables": [],
+  "nodes": [
+    {
+      "id": "n_3b2fb02d-4c95-4f25-9b67-94d276f309e7",
+      "type": "dialogue",
+      "displayMode": "character",
+      "speaker": "미라",
+      "displayName": "미라",
+      "text": "어서 오세요, 손님!",
+      "portraitId": "mira",
+      "expression": "happy",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "n_b45b40ea-3c33-41ea-8cde-9fd3140f3d4c",
+      "endingName": ""
+    },
+    {
+      "id": "n_b45b40ea-3c33-41ea-8cde-9fd3140f3d4c",
+      "type": "dialogue",
+      "displayMode": "narration",
+      "speaker": "",
+      "displayName": "",
+      "text": "가게 안에는 약초 향기가 은은하게 퍼진다.",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "n_11a56ef3-a79a-41be-a5f4-e69458246ed5",
+      "endingName": ""
+    },
+    {
+      "id": "n_11a56ef3-a79a-41be-a5f4-e69458246ed5",
+      "type": "dialogue",
+      "displayMode": "sceneTransition",
+      "speaker": "",
+      "displayName": "",
+      "text": "10분 후...",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "n_454a8c37-aaa8-431f-9aa4-d5d597c720b1",
+      "endingName": ""
+    },
+    {
+      "id": "n_454a8c37-aaa8-431f-9aa4-d5d597c720b1",
+      "type": "dialogue",
+      "displayMode": "character",
+      "speaker": "미라",
+      "displayName": "미라",
+      "text": "기다리셨죠? 포션이 다 만들어졌어요.",
+      "portraitId": "mira",
+      "expression": "happy",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "n_7be04d14-d443-45df-99d4-66fcf8574595",
+      "endingName": ""
+    },
+    {
+      "id": "n_7be04d14-d443-45df-99d4-66fcf8574595",
+      "type": "end",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "완료"
+    }
+  ]
+}

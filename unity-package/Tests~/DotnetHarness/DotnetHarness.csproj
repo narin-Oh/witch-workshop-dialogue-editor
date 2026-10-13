@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Standalone harness that compiles the engine-independent core (Runtime/Core) and runs the SAME NUnit tests that Unity's
+    Test Runner runs (Tests/Editor/Core), without Unity. Sandbox verification only - see Documentation~/TestingStatus.md.
+    Run:  dotnet test unity-package/Tests~/DotnetHarness
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>WitchWorkshop.Dialogue.Tests</RootNamespace>
+    <!-- Unity does not run with warnings-as-errors; keep it strict here to catch problems early. -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../../Runtime/Core/**/*.cs" Link="Core/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="../../Tests/Editor/Core/**/*.cs" Link="Tests/%(RecursiveDir)%(Filename)%(Extension)" />
+    <None Include="../../Tests/Editor/Core/Golden/*.json" Link="Golden/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+
+</Project>

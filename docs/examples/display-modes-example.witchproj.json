@@ -1,0 +1,138 @@
+{
+  "app": "witch-workshop-dialogue-editor",
+  "formatVersion": 1,
+  "project": {
+    "formatVersion": 1,
+    "id": "p_a93f9fd3-707f-4fc6-9214-c671e588c4bf",
+    "name": "표시 방식 예시",
+    "variables": [],
+    "graphs": [
+      {
+        "id": "g_73be8def-1b6d-4964-9efd-eb9f76a01cde",
+        "name": "표시 방식 예시",
+        "nodes": [
+          {
+            "id": "n_8b034964-78b0-49d4-966a-e15e0aba8d92",
+            "type": "start",
+            "position": {
+              "x": 60,
+              "y": 60
+            },
+            "data": {
+              "note": ""
+            }
+          },
+          {
+            "id": "n_3b2fb02d-4c95-4f25-9b67-94d276f309e7",
+            "type": "dialogue",
+            "position": {
+              "x": 400,
+              "y": 60
+            },
+            "data": {
+              "displayMode": "character",
+              "speaker": "미라",
+              "speakerOverride": "",
+              "text": "어서 오세요, 손님!",
+              "portraitId": "mira",
+              "expression": "happy"
+            }
+          },
+          {
+            "id": "n_b45b40ea-3c33-41ea-8cde-9fd3140f3d4c",
+            "type": "dialogue",
+            "position": {
+              "x": 740,
+              "y": 60
+            },
+            "data": {
+              "displayMode": "narration",
+              "speaker": "",
+              "speakerOverride": "",
+              "text": "가게 안에는 약초 향기가 은은하게 퍼진다.",
+              "portraitId": "",
+              "expression": "neutral"
+            }
+          },
+          {
+            "id": "n_11a56ef3-a79a-41be-a5f4-e69458246ed5",
+            "type": "dialogue",
+            "position": {
+              "x": 1080,
+              "y": 60
+            },
+            "data": {
+              "displayMode": "sceneTransition",
+              "speaker": "",
+              "speakerOverride": "",
+              "text": "10분 후...",
+              "portraitId": "",
+              "expression": "neutral"
+            }
+          },
+          {
+            "id": "n_454a8c37-aaa8-431f-9aa4-d5d597c720b1",
+            "type": "dialogue",
+            "position": {
+              "x": 1420,
+              "y": 60
+            },
+            "data": {
+              "displayMode": "character",
+              "speaker": "미라",
+              "speakerOverride": "",
+              "text": "기다리셨죠? 포션이 다 만들어졌어요.",
+              "portraitId": "mira",
+              "expression": "happy"
+            }
+          },
+          {
+            "id": "n_7be04d14-d443-45df-99d4-66fcf8574595",
+            "type": "end",
+            "position": {
+              "x": 1760,
+              "y": 60
+            },
+            "data": {
+              "endingName": "완료"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "e_97405c82-fb8a-4030-9850-3f54f820b0bb",
+            "source": "n_8b034964-78b0-49d4-966a-e15e0aba8d92",
+            "sourceHandle": "next",
+            "target": "n_3b2fb02d-4c95-4f25-9b67-94d276f309e7"
+          },
+          {
+            "id": "e_5632a19c-dbc9-43d4-be0a-cee8edc146f9",
+            "source": "n_3b2fb02d-4c95-4f25-9b67-94d276f309e7",
+            "sourceHandle": "next",
+            "target": "n_b45b40ea-3c33-41ea-8cde-9fd3140f3d4c"
+          },
+          {
+            "id": "e_fdd1107f-e01c-4d4d-96d6-7722060498f9",
+            "source": "n_b45b40ea-3c33-41ea-8cde-9fd3140f3d4c",
+            "sourceHandle": "next",
+            "target": "n_11a56ef3-a79a-41be-a5f4-e69458246ed5"
+          },
+          {
+            "id": "e_dd95c476-16bd-47b5-b893-ed1c5cc3a7df",
+            "source": "n_11a56ef3-a79a-41be-a5f4-e69458246ed5",
+            "sourceHandle": "next",
+            "target": "n_454a8c37-aaa8-431f-9aa4-d5d597c720b1"
+          },
+          {
+            "id": "e_fce7db28-82cc-453a-9259-bc450a404766",
+            "source": "n_454a8c37-aaa8-431f-9aa4-d5d597c720b1",
+            "sourceHandle": "next",
+            "target": "n_7be04d14-d443-45df-99d4-66fcf8574595"
+          }
+        ]
+      }
+    ],
+    "activeGraphId": "g_73be8def-1b6d-4964-9efd-eb9f76a01cde",
+    "previewOverrides": {}
+  }
+}

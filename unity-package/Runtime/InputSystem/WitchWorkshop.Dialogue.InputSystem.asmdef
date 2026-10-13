@@ -1,0 +1,26 @@
+{
+    "name": "WitchWorkshop.Dialogue.InputSystem",
+    "rootNamespace": "WitchWorkshop.Dialogue.InputSystem",
+    "references": [
+        "WitchWorkshop.Dialogue.Core",
+        "WitchWorkshop.Dialogue",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "WW_HAS_INPUT_SYSTEM"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0",
+            "define": "WW_HAS_INPUT_SYSTEM"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,0 +1,733 @@
+{
+  "schemaVersion": 1,
+  "id": "apprentice-quest",
+  "name": "Apprentice Quest",
+  "startNodeId": "node_001",
+  "variables": [
+    {
+      "name": "moonpetalQuestStarted",
+      "scope": "global",
+      "valueType": "bool",
+      "initial": {
+        "valueType": "bool",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    },
+    {
+      "name": "moonpetals",
+      "scope": "global",
+      "valueType": "int",
+      "initial": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    },
+    {
+      "name": "goldQuest",
+      "scope": "global",
+      "valueType": "int",
+      "initial": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node_001",
+      "type": "condition",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "moonpetalQuestStarted",
+      "operator": "==",
+      "compare": {
+        "valueType": "bool",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "node_002",
+      "nextFalse": "node_010",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_002",
+      "type": "dialogue",
+      "displayMode": "character",
+      "speaker": "Pip",
+      "displayName": "Pip",
+      "text": "Mistress! The moonpetal garden is wilting, and I cannot revive it alone...",
+      "portraitId": "pip",
+      "expression": "worried",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_003",
+      "endingName": ""
+    },
+    {
+      "id": "node_003",
+      "type": "choice",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [
+        {
+          "id": "choice_001",
+          "text": "I'll help. Let's start now.",
+          "next": "node_004"
+        },
+        {
+          "id": "choice_002",
+          "text": "Not today, Pip.",
+          "next": "node_008"
+        }
+      ],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_004",
+      "type": "event",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "StartQuest",
+      "eventParams": [
+        {
+          "key": "questId",
+          "valueType": "string",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": "moonpetal_garden"
+        }
+      ],
+      "next": "node_005",
+      "endingName": ""
+    },
+    {
+      "id": "node_005",
+      "type": "variable",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "moonpetalQuestStarted",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "set",
+      "operand": {
+        "valueType": "bool",
+        "intValue": 0,
+        "boolValue": true,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_006",
+      "endingName": ""
+    },
+    {
+      "id": "node_006",
+      "type": "dialogue",
+      "displayMode": "character",
+      "speaker": "Pip",
+      "displayName": "Pip",
+      "text": "Thank you! Please bring me five moonpetals.",
+      "portraitId": "pip",
+      "expression": "happy",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_007",
+      "endingName": ""
+    },
+    {
+      "id": "node_007",
+      "type": "end",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Quest Accepted"
+    },
+    {
+      "id": "node_008",
+      "type": "dialogue",
+      "displayMode": "character",
+      "speaker": "Pip",
+      "displayName": "Pip",
+      "text": "...Okay. I will water them by moonlight, then.",
+      "portraitId": "pip",
+      "expression": "sad",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_009",
+      "endingName": ""
+    },
+    {
+      "id": "node_009",
+      "type": "end",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Declined"
+    },
+    {
+      "id": "node_010",
+      "type": "condition",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "moonpetals",
+      "operator": ">=",
+      "compare": {
+        "valueType": "int",
+        "intValue": 5,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "node_011",
+      "nextFalse": "node_018",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": ""
+    },
+    {
+      "id": "node_011",
+      "type": "dialogue",
+      "displayMode": "sceneTransition",
+      "speaker": "",
+      "displayName": "",
+      "text": "Three days later...",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_012",
+      "endingName": ""
+    },
+    {
+      "id": "node_012",
+      "type": "dialogue",
+      "displayMode": "character",
+      "speaker": "Pip",
+      "displayName": "Pip",
+      "text": "You found them all! The garden is glowing again!",
+      "portraitId": "pip",
+      "expression": "delighted",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_013",
+      "endingName": ""
+    },
+    {
+      "id": "node_013",
+      "type": "event",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "GiveItem",
+      "eventParams": [
+        {
+          "key": "itemId",
+          "valueType": "string",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": "moonpetal_tea"
+        },
+        {
+          "key": "amount",
+          "valueType": "int",
+          "intValue": 3,
+          "boolValue": false,
+          "stringValue": ""
+        }
+      ],
+      "next": "node_014",
+      "endingName": ""
+    },
+    {
+      "id": "node_014",
+      "type": "event",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "CompleteQuest",
+      "eventParams": [
+        {
+          "key": "questId",
+          "valueType": "string",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": "moonpetal_garden"
+        }
+      ],
+      "next": "node_015",
+      "endingName": ""
+    },
+    {
+      "id": "node_015",
+      "type": "variable",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "goldQuest",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "add",
+      "operand": {
+        "valueType": "int",
+        "intValue": 40,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_016",
+      "endingName": ""
+    },
+    {
+      "id": "node_016",
+      "type": "event",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "ChangeScene",
+      "eventParams": [
+        {
+          "key": "sceneName",
+          "valueType": "string",
+          "intValue": 0,
+          "boolValue": false,
+          "stringValue": "workshop_evening"
+        }
+      ],
+      "next": "node_017",
+      "endingName": ""
+    },
+    {
+      "id": "node_017",
+      "type": "end",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Quest Complete"
+    },
+    {
+      "id": "node_018",
+      "type": "dialogue",
+      "displayMode": "narration",
+      "speaker": "",
+      "displayName": "",
+      "text": "A soft breeze stirs the wilted petals.",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_019",
+      "endingName": ""
+    },
+    {
+      "id": "node_019",
+      "type": "dialogue",
+      "displayMode": "character",
+      "speaker": "Pip",
+      "displayName": "Pip",
+      "text": "Still a few petals short. Keep searching the forest edge!",
+      "portraitId": "pip",
+      "expression": "hopeful",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_020",
+      "endingName": ""
+    },
+    {
+      "id": "node_020",
+      "type": "end",
+      "displayMode": "",
+      "speaker": "",
+      "displayName": "",
+      "text": "",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "",
+      "endingName": "Keep Searching"
+    }
+  ]
+}

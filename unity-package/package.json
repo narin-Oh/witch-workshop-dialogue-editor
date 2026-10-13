@@ -1,0 +1,33 @@
+{
+  "name": "com.witchworkshop.dialogue",
+  "version": "0.1.0",
+  "displayName": "Witch Workshop Dialogue",
+  "description": "Runs dialogue graphs exported by the Witch Workshop web editor: branching dialogue, choices, conditions, variables (global and local), game events, character portraits and replaceable uGUI/TextMeshPro views.",
+  "unity": "6000.0",
+  "documentationUrl": "https://github.com/narin-Oh/witch-workshop-dialogue-editor/tree/main/unity-package/README.md",
+  "keywords": [
+    "dialogue",
+    "dialog",
+    "conversation",
+    "visual novel",
+    "witch workshop"
+  ],
+  "author": {
+    "name": "Witch Workshop"
+  },
+  "dependencies": {
+    "com.unity.ugui": "2.0.0"
+  },
+  "samples": [
+    {
+      "displayName": "Potion Customer demo",
+      "description": "One-component demo: a customer visits the workshop and asks for a potion. Builds a basic UI and placeholder portraits at runtime.",
+      "path": "Samples~/PotionCustomer"
+    },
+    {
+      "displayName": "Game events example",
+      "description": "Example handlers for GiveItem, OpenShop, UnlockRecipe, StartQuest, CompleteQuest and ChangeScene against minimal interfaces, plus the Apprentice Quest dialogue.",
+      "path": "Samples~/GameEventsExample"
+    }
+  ]
+}
