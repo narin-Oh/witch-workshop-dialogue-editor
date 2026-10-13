@@ -377,6 +377,146 @@ namespace WitchWorkshop.Dialogue.StubTests
             Assert.IsTrue(problems.Exists(p => p.Contains("Choice Button Prefab")));
         }
 
+        // ---- display modes (stub-level wiring checks; NOT real Unity rendering) ----
+
+        private static DialogueLine ModeLine(string mode, string text)
+        {
+            return new DialogueLine(new DialogueNodeData { id = "n", type = "dialogue", displayMode = mode, speaker = "Mira", displayName = "Mira", text = text, portraitId = "mira", expression = "happy" });
+        }
+
+        private sealed class SceneRig
+        {
+            public DialogueUI ui; public GameObject host, panel, choices, overlay; public TextMeshProUGUI body, name, sceneText; public Image portrait; public GameObject plate; public Controller ctl;
+        }
+
+        /// <summary>The default-builder layout: host container with the normal UI (panel, choices) and the overlay as direct children.</summary>
+        private static SceneRig MakeScene(bool overlayIsDirectChild = true)
+        {
+            var r = new SceneRig();
+            r.host = new GameObject("Dialogue UI");
+            r.ui = r.host.AddComponent<DialogueUI>();
+            r.panel = new GameObject("Dialogue Panel"); r.panel.transform.SetParent(r.host.transform);
+            r.choices = new GameObject("Choices"); r.choices.transform.SetParent(r.host.transform);
+            r.overlay = new GameObject("Overlay"); r.overlay.transform.SetParent(overlayIsDirectChild ? r.host.transform : r.panel.transform);
+            r.overlay.SetActive(false);
+            r.name = new GameObject("Name").AddComponent<TextMeshProUGUI>();
+            r.body = new GameObject("Body").AddComponent<TextMeshProUGUI>();
+            r.portrait = new GameObject("Portrait").AddComponent<Image>();
+            r.plate = new GameObject("Plate");
+            r.sceneText = new GameObject("SceneText").AddComponent<TextMeshProUGUI>();
+            var prefab = new GameObject("Choice").AddComponent<Button>();
+            r.ui.Configure(r.name, r.body, r.portrait, new GameObject("c").AddComponent<RectTransform>(), prefab, new GameObject("Next").AddComponent<Button>(), r.plate);
+            var sceneButton = new GameObject("SceneButton").AddComponent<Button>();
+            r.ui.ConfigureSceneText(r.overlay, r.sceneText, sceneButton);
+            r.ctl = new Controller();
+            r.ui.Bind(r.ctl);
+            r.ui.PortraitResolver = new GameObject("r").AddComponent<FakeResolver>();
+            return r;
+        }
+
+        [Test]
+        public void CharacterLineShowsNameAndPortraitAndKeepsTheOverlayHidden()
+        {
+            var r = MakeScene();
+            r.ui.Show();
+            r.ui.ShowLine(ModeLine("character", "Hello"));
+            Assert.AreEqual("Mira", r.name.text);
+            Assert.IsTrue(r.plate.activeSelf);
+            Assert.IsTrue(r.portrait.enabled);
+            Assert.IsFalse(r.overlay.activeSelf);
+            Assert.IsFalse(r.ui.IsSceneTextShowing);
+        }
+
+        [Test]
+        public void NarrationHidesNameAndPortraitButKeepsThePanel()
+        {
+            var r = MakeScene();
+            r.ui.Show();
+            r.ui.ShowLine(ModeLine("character", "Hi"));
+            r.ui.ShowLine(ModeLine("narration", "Wind blows."));
+            Assert.AreEqual("Wind blows.", r.body.text);
+            Assert.IsFalse(r.plate.activeSelf, "no name plate");
+            Assert.IsFalse(r.portrait.enabled, "no portrait, and the previous one does not linger");
+            Assert.IsTrue(r.panel.activeSelf, "the dialogue panel stays");
+            Assert.IsFalse(r.overlay.activeSelf);
+            r.ui.ShowLine(ModeLine("character", "Back"));
+            Assert.IsTrue(r.plate.activeSelf);
+            Assert.IsTrue(r.portrait.enabled, "the portrait returns for the next character line");
+        }
+
+        [Test]
+        public void SceneTextHidesTheNormalUiShowsTheOverlayAndRestoresOnAdvance()
+        {
+            var r = MakeScene();
+            r.ui.Show();
+            r.ui.ShowLine(ModeLine("character", "Hi"));
+            r.ui.ShowLine(ModeLine("sceneTransition", "10 minutes later..."));
+            Assert.IsTrue(r.ui.IsSceneTextShowing);
+            Assert.IsTrue(r.overlay.activeSelf);
+            Assert.AreEqual("10 minutes later...", r.sceneText.text);
+            Assert.IsFalse(r.panel.activeSelf, "normal dialogue panel hidden");
+            Assert.IsFalse(r.choices.activeSelf, "normal choices area hidden");
+
+            r.ui.OnAdvanceInput(); // normal advance input, no timer
+            Assert.AreEqual(1, r.ctl.Advances);
+
+            r.ui.ShowLine(ModeLine("character", "Welcome back"));
+            Assert.IsFalse(r.ui.IsSceneTextShowing);
+            Assert.IsFalse(r.overlay.activeSelf, "overlay gone");
+            Assert.IsTrue(r.panel.activeSelf && r.choices.activeSelf, "normal UI restored");
+            Assert.AreEqual("Welcome back", r.body.text);
+        }
+
+        [Test]
+        public void ConsecutiveSceneLinesKeepTheOverlayAndHideRestoresTheNormalUi()
+        {
+            var r = MakeScene();
+            r.ui.Show();
+            r.ui.ShowLine(ModeLine("sceneTransition", "One"));
+            r.ui.ShowLine(ModeLine("sceneTransition", "Two"));
+            Assert.AreEqual("Two", r.sceneText.text);
+            Assert.IsFalse(r.panel.activeSelf);
+            r.ui.Hide(); // e.g. the conversation ends right after the scene text
+            Assert.IsFalse(r.overlay.activeSelf);
+            Assert.IsTrue(r.panel.activeSelf, "next conversation starts with the normal UI back");
+            Assert.IsFalse(r.ui.IsSceneTextShowing);
+        }
+
+        [Test]
+        public void ChoicesAfterSceneTextRestoreTheNormalUi()
+        {
+            var r = MakeScene();
+            r.ui.Show();
+            r.ui.ShowLine(ModeLine("sceneTransition", "Later..."));
+            r.ui.ShowChoices(new List<DialogueChoice> { new DialogueChoice(0, "c0", "Yes") });
+            Assert.IsFalse(r.overlay.activeSelf);
+            Assert.IsTrue(r.panel.activeSelf && r.choices.activeSelf);
+        }
+
+        [Test]
+        public void SceneTextWithoutAnOverlayFallsBackToTheNormalPanel()
+        {
+            var (ui, name, body, portrait, _, _) = Make();
+            ui.Show();
+            ui.ShowLine(ModeLine("sceneTransition", "Later..."));
+            Assert.AreEqual("Later...", body.text);
+            Assert.IsFalse(portrait.enabled);
+            Assert.IsFalse(ui.IsSceneTextShowing);
+        }
+
+        [Test]
+        public void ReportsAnOverlayThatWouldBeHiddenWithTheNormalUi()
+        {
+            var r = MakeScene(overlayIsDirectChild: false);
+            var problems = new List<string>();
+            r.ui.CollectProblems(problems);
+            Assert.IsTrue(problems.Exists(p => p.Contains("Scene Overlay Root")), string.Join(" | ", problems));
+            var ok = MakeScene();
+            var okProblems = new List<string>();
+            ok.ui.CollectProblems(okProblems);
+            Assert.IsFalse(okProblems.Exists(p => p.Contains("Scene Overlay Root")));
+        }
+
         [Test]
         public void SpeakerStylesAreMatchedCaseInsensitively()
         {

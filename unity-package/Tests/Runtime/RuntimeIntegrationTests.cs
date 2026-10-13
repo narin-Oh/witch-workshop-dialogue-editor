@@ -110,6 +110,33 @@ namespace WitchWorkshop.Dialogue.Tests
             Assert.AreEqual(1, controller.Advances, "second press advances");
         }
 
+        [UnityTest]
+        public IEnumerator SceneTransitionTextShowsABlackOverlayAndRestoresTheNormalUi()
+        {
+            var built = DefaultDialogueUIBuilder.Build(null, ensureEventSystem: false);
+            created.Add(built.Canvas.gameObject);
+            var controller = new CountingController();
+            built.UI.Bind(controller);
+            built.UI.Show();
+            built.UI.ShowLine(new DialogueLine(new DialogueNodeData { id = "s", type = "dialogue", displayMode = "sceneTransition", text = "10 minutes later..." }));
+            yield return null;
+            Assert.IsTrue(built.UI.IsSceneTextShowing);
+            var panel = built.UI.transform.Find("Dialogue Panel");
+            var overlay = built.UI.transform.Find("Scene Text Overlay");
+            Assert.IsFalse(panel.gameObject.activeSelf, "normal dialogue UI is hidden");
+            Assert.IsTrue(overlay.gameObject.activeSelf);
+            Assert.AreEqual(Color.black, overlay.GetComponent<Image>().color);
+            Assert.AreEqual("10 minutes later...", overlay.GetComponentInChildren<TMP_Text>().text);
+
+            built.UI.OnAdvanceInput();
+            Assert.AreEqual(1, controller.Advances, "scene text advances through the normal input");
+
+            built.UI.ShowLine(new DialogueLine(new DialogueNodeData { id = "c", type = "dialogue", displayMode = "character", speaker = "A", displayName = "A", text = "Back" }));
+            yield return null;
+            Assert.IsFalse(overlay.gameObject.activeSelf);
+            Assert.IsTrue(panel.gameObject.activeSelf, "normal UI is restored");
+        }
+
         [Test]
         public void PortraitResolverReturnsASpriteAndNeverThrowsForUnknownIds()
         {

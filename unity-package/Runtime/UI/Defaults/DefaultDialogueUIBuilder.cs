@@ -32,8 +32,14 @@ namespace WitchWorkshop.Dialogue
             scaler.referenceResolution = new Vector2(1280, 720);
             scaler.matchWidthOrHeight = 0.5f;
 
+            // full-screen container that holds the DialogueUI component: the panel, the choices and the scene-text overlay are its
+            // children, so scene transition text can hide the normal UI (the panel + choices) and show the black overlay on top.
+            var container = Rect("Dialogue UI", canvasGo.transform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            container.offsetMin = Vector2.zero;
+            container.offsetMax = Vector2.zero;
+
             // panel: bottom strip, full width
-            var panel = Rect("Dialogue Panel", canvasGo.transform, new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 0), new Vector2(0, 210));
+            var panel = Rect("Dialogue Panel", container, new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 0), new Vector2(0, 210));
             panel.pivot = new Vector2(0.5f, 0f);
             panel.offsetMin = new Vector2(40, 24);
             panel.offsetMax = new Vector2(-40, 234);
@@ -80,7 +86,7 @@ namespace WitchWorkshop.Dialogue
             indicator.raycastTarget = false;
 
             // choices: stacked above the panel
-            var choices = Rect("Choices", canvasGo.transform, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 250), new Vector2(760, 0));
+            var choices = Rect("Choices", container, new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 250), new Vector2(760, 0));
             choices.pivot = new Vector2(0.5f, 0f);
             var layout = choices.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.spacing = 10;
@@ -95,8 +101,22 @@ namespace WitchWorkshop.Dialogue
             var buttonPrefab = BuildChoiceButtonTemplate(choices);
 
             // view
-            var ui = panel.gameObject.AddComponent<DialogueUI>();
+            var ui = container.gameObject.AddComponent<DialogueUI>();
             ui.Configure(nameText, bodyText, portraitImage, choices, buttonPrefab, advance, plate.gameObject, indicator.gameObject);
+
+            // scene transition text: opaque black, centered text, click anywhere to advance (last child = drawn on top)
+            var overlay = Rect("Scene Text Overlay", container, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            overlay.offsetMin = Vector2.zero;
+            overlay.offsetMax = Vector2.zero;
+            var overlayImage = overlay.gameObject.AddComponent<Image>();
+            overlayImage.color = Color.black;
+            var overlayButton = overlay.gameObject.AddComponent<Button>();
+            overlayButton.transition = Selectable.Transition.None;
+            var sceneText = Text("Scene Text", overlay, 40, FontStyles.Normal, TextAlignmentOptions.Center);
+            Stretch(sceneText.rectTransform, 80, 80, 80, 80);
+            sceneText.color = Color.white;
+            overlay.gameObject.SetActive(false);
+            ui.ConfigureSceneText(overlay.gameObject, sceneText, overlayButton);
 
             if (ensureEventSystem) EnsureEventSystem();
             return new Result { Canvas = canvas, UI = ui };

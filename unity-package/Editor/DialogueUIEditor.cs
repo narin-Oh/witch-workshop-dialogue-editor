@@ -70,6 +70,10 @@ namespace WitchWorkshop.Dialogue.Editor
             Set("choiceContainer", Child<RectTransform>("choice"));
             Set("choiceButtonPrefab", Child<Button>("choice"));
             Set("advanceButton", Child<Button>("next", "advance", "continue"));
+            var overlay = Child<RectTransform>("scene text overlay", "scene overlay", "scene");
+            Set("sceneOverlayRoot", overlay != null ? overlay.gameObject : null);
+            Set("sceneOverlayText", overlay != null ? overlay.GetComponentInChildren<TMP_Text>(true) : null);
+            Set("sceneAdvanceButton", overlay != null ? overlay.GetComponent<Button>() : null);
 
             so.ApplyModifiedProperties();
             EditorUtility.SetDirty(ui);

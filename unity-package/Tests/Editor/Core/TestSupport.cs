@@ -58,6 +58,7 @@ namespace WitchWorkshop.Dialogue.Tests
     public class GoldenStep
     {
         public string kind;
+        public string displayMode;
         public string displayName;
         public string text;
         public string portraitId;

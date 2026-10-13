@@ -76,6 +76,16 @@ namespace WitchWorkshop.Dialogue
         [Tooltip("Also advance with Space / Enter (only with the legacy Input Manager; with the new Input System see Documentation~/CustomUI.md).")]
         [SerializeField] private bool advanceWithKeys = true;
 
+        [Header("Scene transition text (optional)")]
+        [Tooltip("A full-screen BLACK overlay shown for 'Scene Transition Text' lines (e.g. \"10 minutes later...\"). Must NOT be inside the object hidden below. Without it, such lines fall back to the normal dialogue panel without speaker/portrait.")]
+        [SerializeField] private GameObject sceneOverlayRoot;
+        [Tooltip("The centered text on the overlay.")]
+        [SerializeField] private TMP_Text sceneOverlayText;
+        [Tooltip("Optional full-screen button on the overlay; clicking it advances. (Space/Enter also advance, as for normal lines.)")]
+        [SerializeField] private Button sceneAdvanceButton;
+        [Tooltip("Optional: the object holding your normal dialogue UI, hidden while scene text shows. If empty: the Panel Root when it is a different object, otherwise this object's direct children (except the overlay).")]
+        [SerializeField] private GameObject normalUiRoot;
+
         [Header("Speaker styles (optional)")]
         [SerializeField] private List<SpeakerStyle> speakerStyles = new List<SpeakerStyle>();
 
@@ -93,6 +103,9 @@ namespace WitchWorkshop.Dialogue
         private Color defaultBodyColor = Color.white;
         private Sprite defaultNamePlateSprite;
         private bool defaultsCaptured;
+        private bool sceneActive;
+        private bool warnedNoOverlay;
+        private readonly List<GameObject> hiddenForScene = new List<GameObject>();
 
         // ---------------------------------------------------------------- public configuration (code-built UIs)
 
@@ -115,6 +128,19 @@ namespace WitchWorkshop.Dialogue
             WireAdvanceButton();
         }
 
+        /// <summary>Assigns the scene transition overlay from code (the Inspector does the same for scene-built UIs).</summary>
+        public void ConfigureSceneText(GameObject overlay, TMP_Text text, Button advance = null)
+        {
+            sceneOverlayRoot = overlay;
+            sceneOverlayText = text;
+            sceneAdvanceButton = advance;
+            WireAdvanceButton();
+            WireSceneButton();
+        }
+
+        /// <summary>True while a Scene Transition Text line is showing on the black overlay.</summary>
+        public bool IsSceneTextShowing { get { return sceneActive; } }
+
         /// <summary>Reports missing references. Used by the inspector and Awake.</summary>
         public void CollectProblems(List<string> problems)
         {
@@ -125,6 +151,10 @@ namespace WitchWorkshop.Dialogue
             if (choiceButtonPrefab != null && choiceButtonPrefab.gameObject.scene.IsValid() && choiceButtonPrefab.gameObject.activeInHierarchy)
                 problems.Add("Choice Button Prefab is an active scene object; it is used as a template and will be hidden at runtime.");
             if (advanceButton == null) problems.Add("No Advance Button: players can only advance with keys or by calling OnAdvanceInput().");
+            if (sceneOverlayRoot == null || sceneOverlayText == null)
+                problems.Add("Scene Transition Text is not set up (Scene Overlay Root / Scene Overlay Text): such lines will use the normal panel without a speaker or portrait instead of a black screen.");
+            else if (SceneOverlayInsideHiddenUi())
+                problems.Add("Scene Overlay Root is inside the object that is hidden during scene text, so it would be hidden too. Move it outside (e.g. a sibling of your dialogue panel).");
         }
 
         // ---------------------------------------------------------------- lifecycle
@@ -133,6 +163,8 @@ namespace WitchWorkshop.Dialogue
         {
             CaptureDefaults();
             WireAdvanceButton();
+            WireSceneButton();
+            if (sceneOverlayRoot != null) sceneOverlayRoot.SetActive(false);
             if (choiceButtonPrefab != null && choiceButtonPrefab.gameObject.scene.IsValid()) choiceButtonPrefab.gameObject.SetActive(false);
             var problems = new List<string>();
             if (bodyText == null) { problems.Add("Body Text is not assigned."); }
@@ -156,9 +188,16 @@ namespace WitchWorkshop.Dialogue
             advanceButton.onClick.AddListener(OnAdvanceInput);
         }
 
+        private void WireSceneButton()
+        {
+            if (sceneAdvanceButton == null) return;
+            sceneAdvanceButton.onClick.RemoveListener(OnAdvanceInput);
+            sceneAdvanceButton.onClick.AddListener(OnAdvanceInput);
+        }
+
         private void Update()
         {
-            if (!advanceWithKeys || !PanelRoot.activeInHierarchy) return;
+            if (!advanceWithKeys || !(sceneActive || PanelRoot.activeInHierarchy)) return;
             if (!waitingForAdvance && !lineAnimating) return;
 #if ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) OnAdvanceInput();
@@ -175,6 +214,7 @@ namespace WitchWorkshop.Dialogue
         public override void Show()
         {
             CaptureDefaults();
+            EndSceneText();
             PanelRoot.SetActive(true);
             ClearChoices();
             if (continueIndicator != null) continueIndicator.SetActive(false);
@@ -186,6 +226,7 @@ namespace WitchWorkshop.Dialogue
             StopTyping();
             waitingForAdvance = false;
             ClearChoices();
+            EndSceneText();
             if (continueIndicator != null) continueIndicator.SetActive(false);
             PanelRoot.SetActive(false);
             onHidden.Invoke();
@@ -195,6 +236,16 @@ namespace WitchWorkshop.Dialogue
         {
             CaptureDefaults();
             ClearChoices();
+            if (line.Mode == DialogueDisplayMode.SceneTransition)
+            {
+                if (sceneOverlayRoot != null && sceneOverlayText != null) { ShowSceneText(line); return; }
+                if (!warnedNoOverlay)
+                {
+                    warnedNoOverlay = true;
+                    Debug.LogWarning("DialogueUI: a Scene Transition Text line was reached but no Scene Overlay is assigned; showing it in the normal panel (no speaker/portrait). See Documentation~/CustomUI.md.", this);
+                }
+            }
+            EndSceneText(); // back from a black screen: the normal UI returns before the next line shows
             ApplySpeaker(line);
             ApplyPortrait(line);
 
@@ -221,6 +272,7 @@ namespace WitchWorkshop.Dialogue
 
         public override void ShowChoices(IReadOnlyList<DialogueChoice> choices)
         {
+            EndSceneText();
             StopTyping();
             waitingForAdvance = false;
             if (continueIndicator != null) continueIndicator.SetActive(false);
@@ -281,6 +333,71 @@ namespace WitchWorkshop.Dialogue
             return null;
         }
 
+        // Scene transition text: hide the normal dialogue UI, show the black overlay. It waits for the normal advance input
+        // (button / Space / Enter / OnAdvanceInput); there is no timer.
+        private void ShowSceneText(DialogueLine line)
+        {
+            StopTyping();
+            if (!sceneActive)
+            {
+                PanelRoot.SetActive(true); // the conversation is running; the normal UI may be hidden below
+                SetNormalUiVisible(false);
+                sceneActive = true;
+            }
+            sceneOverlayRoot.SetActive(true);
+            sceneOverlayText.text = line.Text;
+            waitingForAdvance = true;
+            lineAnimating = false;
+            if (continueIndicator != null) continueIndicator.SetActive(false);
+            onLineShown.Invoke();
+        }
+
+        private void EndSceneText()
+        {
+            if (!sceneActive) return;
+            sceneActive = false;
+            if (sceneOverlayRoot != null) sceneOverlayRoot.SetActive(false);
+            SetNormalUiVisible(true);
+        }
+
+        private GameObject HiddenUiRoot
+        {
+            get
+            {
+                if (normalUiRoot != null) return normalUiRoot;
+                return panelRoot != null && panelRoot != gameObject ? panelRoot : null;
+            }
+        }
+
+        private bool SceneOverlayInsideHiddenUi()
+        {
+            var root = HiddenUiRoot;
+            if (root != null) return sceneOverlayRoot.transform.IsChildOf(root.transform);
+            return sceneOverlayRoot.transform.parent != transform; // children mode hides direct children; the overlay must be one of them (it is skipped)
+        }
+
+        private void SetNormalUiVisible(bool visible)
+        {
+            var root = HiddenUiRoot;
+            if (root != null) { root.SetActive(visible); return; }
+            if (!visible)
+            {
+                hiddenForScene.Clear();
+                foreach (Transform child in transform)
+                {
+                    var go = child.gameObject;
+                    if (go == sceneOverlayRoot || !go.activeSelf) continue;
+                    hiddenForScene.Add(go);
+                    go.SetActive(false);
+                }
+            }
+            else
+            {
+                foreach (var go in hiddenForScene) if (go != null) go.SetActive(true);
+                hiddenForScene.Clear();
+            }
+        }
+
         private void ApplySpeaker(DialogueLine line)
         {
             bool hasName = !string.IsNullOrEmpty(line.DisplayName);
@@ -297,6 +414,13 @@ namespace WitchWorkshop.Dialogue
         private void ApplyPortrait(DialogueLine line)
         {
             if (portraitImage == null) return;
+            if (line.Mode != DialogueDisplayMode.Character)
+            {
+                // Narration has no portrait (the previous line's portrait must not linger).
+                portraitImage.enabled = false;
+                if (portraitRoot != null) portraitRoot.SetActive(false);
+                return;
+            }
             Sprite sprite = null;
             bool found = portraitResolver != null && portraitResolver.TryResolve(line.PortraitId, line.Expression, out sprite) && sprite != null;
             if (found)

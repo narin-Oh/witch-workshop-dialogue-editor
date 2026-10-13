@@ -53,6 +53,7 @@
     {
       "id": "node_001",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Mira",
       "displayName": "Mira",
       "text": "Excuse me... is this the witch's workshop? I've had this awful cough for days.",
@@ -84,6 +85,7 @@
     {
       "id": "node_002",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Lumi",
       "displayName": "Lumi",
       "text": "You've come to the right place, dear. What sort of potion do you need?",
@@ -115,6 +117,7 @@
     {
       "id": "node_003",
       "type": "choice",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -162,6 +165,7 @@
     {
       "id": "node_004",
       "type": "condition",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -193,6 +197,7 @@
     {
       "id": "node_005",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Lumi",
       "displayName": "Lumi",
       "text": "One Herbal Cough Syrup, fresh from the cauldron. How shall we settle the price?",
@@ -224,6 +229,7 @@
     {
       "id": "node_006",
       "type": "choice",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -271,6 +277,7 @@
     {
       "id": "node_007",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -302,6 +309,7 @@
     {
       "id": "node_008",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Mira",
       "displayName": "Mira",
       "text": "Thank you! I feel better already.",
@@ -333,6 +341,7 @@
     {
       "id": "node_009",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -364,6 +373,7 @@
     {
       "id": "node_010",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -395,6 +405,7 @@
     {
       "id": "node_011",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -426,6 +437,7 @@
     {
       "id": "node_012",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Mira",
       "displayName": "Mira",
       "text": "You are too kind! I will tell everyone about this place.",
@@ -457,6 +469,7 @@
     {
       "id": "node_013",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -488,6 +501,7 @@
     {
       "id": "node_014",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -519,6 +533,7 @@
     {
       "id": "node_015",
       "type": "condition",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -550,6 +565,7 @@
     {
       "id": "node_016",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Mira",
       "displayName": "Mira",
       "text": "Hmm... twenty-five? Please?",
@@ -581,6 +597,7 @@
     {
       "id": "node_017",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Mira",
       "displayName": "Mira",
       "text": "Fine — twenty gold and not a coin more!",
@@ -612,6 +629,7 @@
     {
       "id": "node_018",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -643,6 +661,7 @@
     {
       "id": "node_019",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -674,6 +693,7 @@
     {
       "id": "node_020",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Lumi",
       "displayName": "Lumi",
       "text": "Ah... I haven't mastered that recipe yet. A tutor in town would teach me for 50 gold.",
@@ -705,6 +725,7 @@
     {
       "id": "node_021",
       "type": "choice",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -747,6 +768,7 @@
     {
       "id": "node_022",
       "type": "condition",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -778,6 +800,7 @@
     {
       "id": "node_023",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -809,6 +832,7 @@
     {
       "id": "node_024",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -840,6 +864,7 @@
     {
       "id": "node_025",
       "type": "event",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -879,6 +904,7 @@
     {
       "id": "node_026",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Lumi",
       "displayName": "Lumi",
       "text": "Recipe learned! Now, where were we?",
@@ -910,6 +936,7 @@
     {
       "id": "node_027",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Lumi",
       "displayName": "Lumi",
       "text": "Oh dear, my pockets are empty. I can't afford the lesson.",
@@ -941,6 +968,7 @@
     {
       "id": "node_028",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -972,6 +1000,7 @@
     {
       "id": "node_029",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Mira",
       "displayName": "Mira",
       "text": "Oh... I'll come back another day, then.",
@@ -1003,6 +1032,7 @@
     {
       "id": "node_030",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -1034,6 +1064,7 @@
     {
       "id": "node_031",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Mira",
       "displayName": "Mira",
       "text": "Something with a bit more... kick?",
@@ -1065,6 +1096,7 @@
     {
       "id": "node_032",
       "type": "condition",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -1096,6 +1128,7 @@
     {
       "id": "node_033",
       "type": "event",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -1135,6 +1168,7 @@
     {
       "id": "node_034",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Lumi",
       "displayName": "Lumi",
       "text": "You come recommended. Take a look at the back-room shelf.",
@@ -1166,6 +1200,7 @@
     {
       "id": "node_035",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -1197,6 +1232,7 @@
     {
       "id": "node_036",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Lumi",
       "displayName": "Lumi",
       "text": "I don't sell those to strangers. Come back when the town knows you.",
@@ -1228,6 +1264,7 @@
     {
       "id": "node_037",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -1259,6 +1296,7 @@
     {
       "id": "node_038",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Mira",
       "displayName": "Mira",
       "text": "Oh! I'm so sorry to have bothered you.",
@@ -1290,6 +1328,7 @@
     {
       "id": "node_039",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -1321,6 +1360,7 @@
     {
       "id": "node_040",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",

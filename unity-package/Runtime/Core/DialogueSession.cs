@@ -16,10 +16,22 @@ namespace WitchWorkshop.Dialogue
         Error,
     }
 
+    /// <summary>How a line is presented. Unknown or missing values in the data are treated as <see cref="Character"/>.</summary>
+    public enum DialogueDisplayMode
+    {
+        /// <summary>Speaker name, portrait and text in the dialogue panel.</summary>
+        Character,
+        /// <summary>Text in the dialogue panel with no speaker name or portrait.</summary>
+        Narration,
+        /// <summary>Text centered on a black screen (e.g. "10 minutes later..."). Advances like any line; it is NOT a timed delay.</summary>
+        SceneTransition,
+    }
+
     /// <summary>A line to display. Contains no UI types: presentation is entirely up to the view.</summary>
     public sealed class DialogueLine
     {
         public string NodeId { get; }
+        public DialogueDisplayMode Mode { get; }
         public string Speaker { get; }
         /// <summary>The name to show (the editor's "speaker name override" if set, otherwise the speaker).</summary>
         public string DisplayName { get; }
@@ -27,14 +39,25 @@ namespace WitchWorkshop.Dialogue
         public string PortraitId { get; }
         public string Expression { get; }
 
+        /// <summary>Maps the exported string to a mode; anything unknown or empty (older exports) is Character.</summary>
+        public static DialogueDisplayMode ParseMode(string value)
+        {
+            if (value == DialogueSchema.ModeNarration) return DialogueDisplayMode.Narration;
+            if (value == DialogueSchema.ModeSceneTransition) return DialogueDisplayMode.SceneTransition;
+            return DialogueDisplayMode.Character;
+        }
+
         public DialogueLine(DialogueNodeData n)
         {
             NodeId = n.id;
-            Speaker = n.speaker ?? "";
-            DisplayName = string.IsNullOrEmpty(n.displayName) ? Speaker : n.displayName;
+            Mode = ParseMode(n.displayMode);
+            // Narration / scene text have no speaker or portrait, even if the data carries leftovers.
+            bool character = Mode == DialogueDisplayMode.Character;
+            Speaker = character ? n.speaker ?? "" : "";
+            DisplayName = !character ? "" : string.IsNullOrEmpty(n.displayName) ? Speaker : n.displayName;
             Text = n.text ?? "";
-            PortraitId = n.portraitId ?? "";
-            Expression = n.expression ?? "";
+            PortraitId = character ? n.portraitId ?? "" : "";
+            Expression = character ? n.expression ?? "" : "";
         }
     }
 

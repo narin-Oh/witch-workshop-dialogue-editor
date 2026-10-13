@@ -51,7 +51,7 @@ namespace WitchWorkshop.Dialogue.Tests
                 if (session.State == DialogueSessionState.WaitingForAdvance)
                 {
                     var l = session.CurrentLine;
-                    actual.Add(new GoldenStep { kind = "line", displayName = l.DisplayName, text = l.Text, portraitId = l.PortraitId, expression = l.Expression });
+                    actual.Add(new GoldenStep { kind = "line", displayMode = ModeName(l.Mode), displayName = l.DisplayName, text = l.Text, portraitId = l.PortraitId, expression = l.Expression });
                     Assert.IsTrue(session.Advance());
                 }
                 else
@@ -76,6 +76,7 @@ namespace WitchWorkshop.Dialogue.Tests
                 switch (e.kind)
                 {
                     case "line":
+                        Assert.AreEqual(e.displayMode, a.displayMode, at + " displayMode");
                         Assert.AreEqual(e.displayName, a.displayName, at + " displayName");
                         Assert.AreEqual(e.text, a.text, at + " text");
                         Assert.AreEqual(e.portraitId, a.portraitId, at + " portraitId");
@@ -115,6 +116,11 @@ namespace WitchWorkshop.Dialogue.Tests
                 Assert.IsTrue(session.TryGetVariable(v.name, out var value), "variable " + v.name);
                 Assert.AreEqual(v.ToValue(), value, "final value of " + v.name);
             }
+        }
+
+        private static string ModeName(DialogueDisplayMode m)
+        {
+            return m == DialogueDisplayMode.Narration ? "narration" : m == DialogueDisplayMode.SceneTransition ? "sceneTransition" : "character";
         }
 
         [Test]

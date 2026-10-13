@@ -29,7 +29,15 @@ export type VariableOperation = 'set' | 'add' | 'subtract';
 export interface StartData {
   note: string;
 }
+/** How a Dialogue node is presented. Older projects have no value: they are Character Dialogue. */
+export type DisplayMode = 'character' | 'narration' | 'sceneTransition';
+export const DISPLAY_MODES: readonly DisplayMode[] = ['character', 'narration', 'sceneTransition'];
+export const DEFAULT_DISPLAY_MODE: DisplayMode = 'character';
+export const normalizeDisplayMode = (v: unknown): DisplayMode => ((DISPLAY_MODES as readonly unknown[]).includes(v) ? (v as DisplayMode) : DEFAULT_DISPLAY_MODE);
+
 export interface DialogueData {
+  /** Presentation mode. Speaker/portrait values are kept (but hidden and ignored) in non-character modes. */
+  displayMode: DisplayMode;
   speaker: string;
   /** Optional display name shown instead of `speaker`. */
   speakerOverride: string;

@@ -34,10 +34,19 @@ namespace UnityEngine
     }
 
     public struct Scene { public bool IsValid() { return false; } }
-    public class Transform : Component
+    public class Transform : Component, System.Collections.IEnumerable
     {
-        public void SetParent(Transform parent, bool worldPositionStays) { }
-        public void SetParent(Transform parent) { }
+        private readonly List<Transform> kids = new List<Transform>();
+        public Transform parent { get; private set; }
+        public void SetParent(Transform p, bool worldPositionStays) { SetParent(p); }
+        public void SetParent(Transform p)
+        {
+            if (parent != null) parent.kids.Remove(this);
+            parent = p;
+            if (p != null) p.kids.Add(this);
+        }
+        public bool IsChildOf(Transform p) { for (var t = this; t != null; t = t.parent) if (ReferenceEquals(t, p)) return true; return false; }
+        public System.Collections.IEnumerator GetEnumerator() { return kids.ToArray().GetEnumerator(); }
     }
     public class RectTransform : Transform
     {
@@ -47,7 +56,7 @@ namespace UnityEngine
     public class Component : Object
     {
         public GameObject gameObject { get; set; }
-        public Transform transform { get; }
+        public Transform transform { get { return gameObject?.transform; } }
         public T GetComponent<T>() where T : class { return gameObject?.GetComponent<T>(); }
         public T GetComponentInChildren<T>(bool includeInactive) where T : class { return gameObject?.GetComponent<T>(); }
         public T[] GetComponentsInChildren<T>(bool includeInactive) where T : class { var t = gameObject?.GetComponent<T>(); return t == null ? new T[0] : new[] { t }; }
@@ -59,11 +68,12 @@ namespace UnityEngine
         private readonly List<Component> components = new List<Component>();
         private bool active = true;
         public string tag = "Untagged";
-        public GameObject() { }
-        public GameObject(string name, params Type[] types) { this.name = name; foreach (var t in types) AddComponent(t); }
+        public GameObject() { transform = new Transform { gameObject = this }; }
+        public GameObject(string name, params Type[] types) : this() { this.name = name; foreach (var t in types) AddComponent(t); }
         public Transform transform { get; }
         public Scene scene { get; }
-        public bool activeInHierarchy { get { return active; } }
+        public bool activeInHierarchy { get { return active && (transform.parent == null || transform.parent.gameObject.activeInHierarchy); } }
+        public bool activeSelf { get { return active; } }
         public void SetActive(bool value) { active = value; }
         internal void Attach(Component c) { c.gameObject = this; components.Add(c); }
         public T AddComponent<T>() where T : Component { return (T)AddComponent(typeof(T)); }
@@ -92,6 +102,7 @@ namespace UnityEngine
         public Color(float r, float g, float b, float a) { this.r = r; this.g = g; this.b = b; this.a = a; }
         public Color(float r, float g, float b) : this(r, g, b, 1f) { }
         public static Color white = new Color(1, 1, 1, 1);
+        public static Color black = new Color(0, 0, 0, 1);
     }
     public enum TextureFormat { RGBA32 }
     public enum FilterMode { Point }

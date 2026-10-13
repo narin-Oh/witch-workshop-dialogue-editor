@@ -103,9 +103,11 @@ function DialogueNode({ id, selected, data }: NodeProps) {
   const name = d.speakerOverride.trim() || d.speaker;
   return (
     <Shell id={id} type="dialogue" selected={selected}>
-      <p className="font-bold">{name || <Muted>{t('card.noSpeaker')}</Muted>}</p>
-      <p className="mt-0.5 line-clamp-3 whitespace-pre-wrap">{d.text || <Muted>{t('card.emptyText')}</Muted>}</p>
-      {(d.portraitId || d.expression) && (
+      {d.displayMode === 'character'
+        ? <p className="font-bold">{name || <Muted>{t('card.noSpeaker')}</Muted>}</p>
+        : <p className="inline-block rounded-full bg-bg/70 px-2 py-0.5 text-[11px] font-bold text-text-sub">{t(`dialogue.mode.${d.displayMode}`)}</p>}
+      <p className={`mt-0.5 line-clamp-3 whitespace-pre-wrap ${d.displayMode === 'narration' ? 'italic' : ''} ${d.displayMode === 'sceneTransition' ? 'text-center font-serif' : ''}`}>{d.text || <Muted>{t('card.emptyText')}</Muted>}</p>
+      {d.displayMode === 'character' && (d.portraitId || d.expression) && (
         <p className="mt-1.5 text-[11px] text-text-sub">
           {d.portraitId || '—'} · {d.expression || '—'}
         </p>

@@ -42,6 +42,7 @@
     {
       "id": "node_001",
       "type": "condition",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -73,6 +74,7 @@
     {
       "id": "node_002",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Pip",
       "displayName": "Pip",
       "text": "Mistress! The moonpetal garden is wilting, and I cannot revive it alone...",
@@ -104,6 +106,7 @@
     {
       "id": "node_003",
       "type": "choice",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -146,6 +149,7 @@
     {
       "id": "node_004",
       "type": "event",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -185,6 +189,7 @@
     {
       "id": "node_005",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -216,6 +221,7 @@
     {
       "id": "node_006",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Pip",
       "displayName": "Pip",
       "text": "Thank you! Please bring me five moonpetals.",
@@ -247,6 +253,7 @@
     {
       "id": "node_007",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -278,6 +285,7 @@
     {
       "id": "node_008",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Pip",
       "displayName": "Pip",
       "text": "...Okay. I will water them by moonlight, then.",
@@ -309,6 +317,7 @@
     {
       "id": "node_009",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -340,6 +349,7 @@
     {
       "id": "node_010",
       "type": "condition",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -355,7 +365,7 @@
         "stringValue": ""
       },
       "nextTrue": "node_011",
-      "nextFalse": "node_017",
+      "nextFalse": "node_018",
       "operation": "",
       "operand": {
         "valueType": "int",
@@ -371,11 +381,12 @@
     {
       "id": "node_011",
       "type": "dialogue",
-      "speaker": "Pip",
-      "displayName": "Pip",
-      "text": "You found them all! The garden is glowing again!",
-      "portraitId": "pip",
-      "expression": "delighted",
+      "displayMode": "sceneTransition",
+      "speaker": "",
+      "displayName": "",
+      "text": "Three days later...",
+      "portraitId": "",
+      "expression": "",
       "choices": [],
       "variable": "",
       "operator": "",
@@ -401,7 +412,40 @@
     },
     {
       "id": "node_012",
+      "type": "dialogue",
+      "displayMode": "character",
+      "speaker": "Pip",
+      "displayName": "Pip",
+      "text": "You found them all! The garden is glowing again!",
+      "portraitId": "pip",
+      "expression": "delighted",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_013",
+      "endingName": ""
+    },
+    {
+      "id": "node_013",
       "type": "event",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -442,12 +486,13 @@
           "stringValue": ""
         }
       ],
-      "next": "node_013",
+      "next": "node_014",
       "endingName": ""
     },
     {
-      "id": "node_013",
+      "id": "node_014",
       "type": "event",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -481,12 +526,13 @@
           "stringValue": "moonpetal_garden"
         }
       ],
-      "next": "node_014",
+      "next": "node_015",
       "endingName": ""
     },
     {
-      "id": "node_014",
+      "id": "node_015",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -512,12 +558,13 @@
       },
       "eventName": "",
       "eventParams": [],
-      "next": "node_015",
+      "next": "node_016",
       "endingName": ""
     },
     {
-      "id": "node_015",
+      "id": "node_016",
       "type": "event",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -551,12 +598,13 @@
           "stringValue": "workshop_evening"
         }
       ],
-      "next": "node_016",
+      "next": "node_017",
       "endingName": ""
     },
     {
-      "id": "node_016",
+      "id": "node_017",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -586,8 +634,41 @@
       "endingName": "Quest Complete"
     },
     {
-      "id": "node_017",
+      "id": "node_018",
       "type": "dialogue",
+      "displayMode": "narration",
+      "speaker": "",
+      "displayName": "",
+      "text": "A soft breeze stirs the wilted petals.",
+      "portraitId": "",
+      "expression": "",
+      "choices": [],
+      "variable": "",
+      "operator": "",
+      "compare": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "nextTrue": "",
+      "nextFalse": "",
+      "operation": "",
+      "operand": {
+        "valueType": "int",
+        "intValue": 0,
+        "boolValue": false,
+        "stringValue": ""
+      },
+      "eventName": "",
+      "eventParams": [],
+      "next": "node_019",
+      "endingName": ""
+    },
+    {
+      "id": "node_019",
+      "type": "dialogue",
+      "displayMode": "character",
       "speaker": "Pip",
       "displayName": "Pip",
       "text": "Still a few petals short. Keep searching the forest edge!",
@@ -613,12 +694,13 @@
       },
       "eventName": "",
       "eventParams": [],
-      "next": "node_018",
+      "next": "node_020",
       "endingName": ""
     },
     {
-      "id": "node_018",
+      "id": "node_020",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",

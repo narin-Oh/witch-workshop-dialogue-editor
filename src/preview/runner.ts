@@ -1,7 +1,7 @@
 import { evaluateCondition } from '../logic/conditions';
 import { choiceHandle, getTarget, nodeMap } from '../logic/graphUtils';
 import { applyOperation, initialStore, type VariableStore } from '../logic/variables';
-import type { EditorGraph, EditorNode, Value, VariableDef } from '../model/types';
+import type { DisplayMode, EditorGraph, EditorNode, Value, VariableDef } from '../model/types';
 import { formatValue } from '../logic/values';
 import { translate, type Params } from '../i18n/translate';
 import { ConditionError } from '../logic/conditions';
@@ -31,6 +31,7 @@ export interface PreviewState {
   status: PreviewStatus;
   /** Node currently waiting for the user (dialogue/choice), or the last node run. */
   nodeId?: string;
+  displayMode: DisplayMode;
   speaker: string;
   text: string;
   portraitId: string;
@@ -47,7 +48,7 @@ export interface PreviewState {
 }
 
 const blank = (vars: VariableStore): PreviewState => ({
-  status: 'finished', speaker: '', text: '', portraitId: '', expression: '', choices: [], vars, events: [], log: [], steps: 0,
+  status: 'finished', displayMode: 'character', speaker: '', text: '', portraitId: '', expression: '', choices: [], vars, events: [], log: [], steps: 0,
 });
 
 /** Begin a session at the Start node. Pure: returns a new state. */
@@ -114,9 +115,15 @@ function run(graph: EditorGraph, initial: PreviewState, firstId: string): Previe
       case 'start':
         return fail(state, id, 'run.backToStart');
       case 'dialogue': {
+        const mode = node.data.displayMode;
+        if (mode !== 'character') {
+          // Narration / scene text: no speaker or portrait; they wait for the normal advance like any line.
+          log('dialogue', id, mode === 'narration' ? 'runlog.narration' : 'runlog.scene', { text: node.data.text });
+          return { ...state, status: 'dialogue', nodeId: id, displayMode: mode, speaker: '', text: node.data.text, portraitId: '', expression: '', choices: [] };
+        }
         const speaker = node.data.speakerOverride.trim() || node.data.speaker;
         log('dialogue', id, 'runlog.dialogue', { speaker: speaker || '???', text: node.data.text });
-        return { ...state, status: 'dialogue', nodeId: id, speaker, text: node.data.text, portraitId: node.data.portraitId, expression: node.data.expression, choices: [] };
+        return { ...state, status: 'dialogue', nodeId: id, displayMode: 'character', speaker, text: node.data.text, portraitId: node.data.portraitId, expression: node.data.expression, choices: [] };
       }
       case 'choice': {
         if (node.data.choices.length === 0) return fail(state, id, 'run.noChoices');

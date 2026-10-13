@@ -75,7 +75,7 @@ describe('autosave', () => {
   });
 });
 
-const NODE_KEYS = ['id', 'type', 'speaker', 'displayName', 'text', 'portraitId', 'expression', 'choices', 'variable', 'operator', 'compare', 'nextTrue', 'nextFalse', 'operation', 'operand', 'eventName', 'eventParams', 'next', 'endingName'].sort();
+const NODE_KEYS = ['id', 'type', 'displayMode', 'speaker', 'displayName', 'text', 'portraitId', 'expression', 'choices', 'variable', 'operator', 'compare', 'nextTrue', 'nextFalse', 'operation', 'operand', 'eventName', 'eventParams', 'next', 'endingName'].sort();
 const VALUE_KEYS = ['valueType', 'intValue', 'boolValue', 'stringValue'].sort();
 
 describe('runtime export', () => {

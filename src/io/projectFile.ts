@@ -1,4 +1,4 @@
-import { NODE_TYPES, OPERATORS } from '../model/types';
+import { NODE_TYPES, OPERATORS, normalizeDisplayMode } from '../model/types';
 import type { EditorEdge, EditorGraph, EditorNode, EditorProject, Value, ValueType, VariableDef } from '../model/types';
 import { isValueOfType } from '../logic/values';
 import { stripTransient } from '../logic/graphEdit';
@@ -81,7 +81,9 @@ function checkNode(n: unknown): EditorNode {
       break;
     case 'end': need('endingName'); break;
   }
-  return { id: n.id, type: n.type, position: { x, y }, data: d } as unknown as EditorNode;
+  // Older files have no displayMode: those dialogue nodes are Character Dialogue. Unknown values fall back the same way.
+  const data = n.type === 'dialogue' ? { ...d, displayMode: normalizeDisplayMode(d.displayMode) } : d;
+  return { id: n.id, type: n.type, position: { x, y }, data } as unknown as EditorNode;
 }
 
 function checkGraph(g: unknown): EditorGraph {

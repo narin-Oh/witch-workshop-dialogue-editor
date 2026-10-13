@@ -27,7 +27,7 @@ from this editor's preview runner on the C# engine.
 
 * Install: Package Manager > *Add package from git URL* with `https://github.com/narin-Oh/witch-workshop-dialogue-editor.git?path=/unity-package`, or *Add package from disk* with `unity-package/package.json`.
 * Docs: `unity-package/README.md`, `unity-package/Documentation~/` (setup, custom UI, portraits, events, save integration, schema).
-* **Verification status:** the engine-independent core is tested outside Unity (`dotnet test unity-package/Tests~/DotnetHarness`, 85 tests); the Unity-facing code has **not** been compiled or run in the Unity Editor. See `unity-package/Documentation~/TestingStatus.md`.
+* **Verification status:** the engine-independent core is tested outside Unity (`dotnet test unity-package/Tests~/DotnetHarness`, 91 tests); the Unity-facing code has **not** been compiled or run in the Unity Editor. See `unity-package/Documentation~/TestingStatus.md`.
 * Maintenance scripts: `npm run export:unity-samples` regenerates the sample dialogues and golden test data from the editor code (a vitest check fails if they are stale); `npm run unity:meta` regenerates the package's `.meta` files.
 
 ## Using the editor
@@ -42,6 +42,13 @@ from this editor's preview runner on the C# engine.
 
 ### Node types
 Start (mint) · Dialogue (lavender) · Choice (yellow, one output per choice) · Condition (blue, True/False) · Variable (peach) · Event (pink) · End (mauve).
+
+### Dialogue display modes
+Every Dialogue node has a **Display mode** (first field in the inspector): **Character Dialogue** (speaker name + portrait + text; the default, and what every older project file opens as),
+**Narration** (text in the dialogue panel with no name or portrait) and **Scene Transition Text** (text centered on a black screen, e.g. "10 minutes later…").
+Narration and scene text hide the speaker/portrait fields but keep their values for when you switch back, and get no missing-speaker warning. The preview shows each mode
+differently (scene text = black screen), the mode is saved in the project file and exported as `displayMode` (older exports without it still play as Character Dialogue), and the Unity
+`DialogueUI` hides the normal UI and shows a black overlay for scene text. Scene text advances with the normal Next input; it is **not** a timed delay.
 
 ### Variables: global vs local
 * **Global** — persistent game state; integrates with Unity save data and is **never reset when a dialogue starts**. Its default is only a fallback.

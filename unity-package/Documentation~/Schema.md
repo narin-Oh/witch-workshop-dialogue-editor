@@ -31,12 +31,25 @@ repository). The C# classes are in `Runtime/Core/DialogueData.cs`; their field n
 
 | `type` | Fields used | Behaviour |
 |---|---|---|
-| `dialogue` | `speaker`, `displayName`, `text`, `portraitId`, `expression`, `next` | Show a line; `displayName` is the name to show (speaker override if set). |
+| `dialogue` | `displayMode`, `speaker`, `displayName`, `text`, `portraitId`, `expression`, `next` | Show a line; `displayName` is the name to show (speaker override if set). `displayMode` says how (below). |
 | `choice` | `choices[] {id, text, next}` | Show choices; continue at the picked choice's `next`. |
 | `condition` | `variable`, `operator`, `compare`, `nextTrue`, `nextFalse` | `==` `!=` `>` `<` `>=` `<=`; bool and string support only `==` / `!=`. |
 | `variable` | `variable`, `operation`, `operand`, `next` | `set`, `add`, `subtract` (add/subtract: int only; flags use `set`). |
 | `event` | `eventName`, `eventParams[]`, `next` | Dispatch to registered handlers, then continue. |
 | `end` | `endingName` | Finish; `endingName` is reported to your code. |
+
+### Dialogue display mode (`displayMode`)
+
+| Value | Meaning | `speaker` / `displayName` / `portraitId` / `expression` |
+|---|---|---|
+| `"character"` | Speaker name, portrait and text (the default). | exported as authored |
+| `"narration"` | Text in the dialogue panel without a name or portrait. | exported as `""` |
+| `"sceneTransition"` | Text centered on a black screen (e.g. "10 minutes later..."). Advances like any line - it is **not** a timed delay. | exported as `""` |
+
+* Nodes that are not `dialogue` export `displayMode: ""`.
+* **Older exports have no `displayMode`.** The C# field defaults to `"character"`, so they load and play as before, and an empty or unknown value is also treated as Character
+  (`DialogueLine.ParseMode`). `schemaVersion` stays `1`: the field is an addition.
+* `DialogueLine.Mode` (`Character`, `Narration`, `SceneTransition`) exposes it to views, and the session itself ignores any leftover speaker/portrait values in non-character lines.
 
 `operator` is a C# keyword, so the field is declared `@operator`; its serialized name is still `operator`.
 

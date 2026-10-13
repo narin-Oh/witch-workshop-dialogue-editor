@@ -8,7 +8,7 @@ export function defaultNodeData(type: NodeType): NodeData {
     case 'start':
       return { note: '' };
     case 'dialogue':
-      return { speaker: '', speakerOverride: '', text: '', portraitId: '', expression: 'neutral' };
+      return { displayMode: 'character', speaker: '', speakerOverride: '', text: '', portraitId: '', expression: 'neutral' };
     case 'choice':
       return { choices: [newChoice(''), newChoice('')] };
     case 'condition':

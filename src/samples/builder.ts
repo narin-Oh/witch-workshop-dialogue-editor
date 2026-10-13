@@ -16,7 +16,15 @@ export class GraphBuilder {
   }
   start(key: string) { return this.add(key, 'start'); }
   say(key: string, speaker: string, text: string, expression = 'neutral', portraitId = '', speakerOverride = '') {
-    return this.add(key, 'dialogue', { speaker, speakerOverride, text, portraitId: portraitId || speaker.toLowerCase(), expression });
+    return this.add(key, 'dialogue', { displayMode: 'character', speaker, speakerOverride, text, portraitId: portraitId || speaker.toLowerCase(), expression });
+  }
+  /** Narration: dialogue-panel text with no speaker or portrait. */
+  narrate(key: string, text: string) {
+    return this.add(key, 'dialogue', { displayMode: 'narration', speaker: '', speakerOverride: '', text, portraitId: '', expression: 'neutral' });
+  }
+  /** Scene transition text: centered on a black screen (e.g. "10 minutes later..."). */
+  scene(key: string, text: string) {
+    return this.add(key, 'dialogue', { displayMode: 'sceneTransition', speaker: '', speakerOverride: '', text, portraitId: '', expression: 'neutral' });
   }
   choice(key: string, ...texts: string[]) {
     const items = texts.map((t) => newChoice(t));

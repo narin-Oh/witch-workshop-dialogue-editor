@@ -50,6 +50,7 @@ function Stage({ state, onNext, onChoose, onRestart, onShowNode }: { state: Prev
     );
   }
   const isChoice = state.status === 'choice';
+  if (state.status === 'dialogue' && state.displayMode === 'sceneTransition') return null; // rendered as a black overlay by the session
   return (
     <div className="mt-auto flex flex-col gap-3">
       {isChoice && (
@@ -69,8 +70,21 @@ function Stage({ state, onNext, onChoose, onRestart, onShowNode }: { state: Prev
           ))}
         </ul>
       )}
-      {state.status === 'dialogue' && (
-        <div className="relative flex items-end gap-4">
+      {state.status === 'dialogue' && state.displayMode === 'narration' && (
+        <div className="relative mx-auto w-full max-w-2xl" data-testid="preview-narration">
+          <div className="relative rounded-3xl border-[3px] border-dashed border-line bg-panel/90 p-1 shadow-pop">
+            <div className="rounded-[20px] px-6 pb-4 pt-6">
+              <div className="absolute -top-3 left-6 rounded-full border border-line bg-bg px-3 py-0.5 text-[11px] font-bold uppercase tracking-wide text-text-sub">{t('preview.modeNarration')}</div>
+              <p className="min-h-[3.5rem] whitespace-pre-wrap text-[16px] italic leading-[1.8] text-text">{state.text}</p>
+              <div className="mt-2 flex justify-end">
+                <Button autoFocus variant="primary" onClick={onNext}>{t('preview.next')}</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {state.status === 'dialogue' && state.displayMode === 'character' && (
+        <div className="relative flex items-end gap-4" data-testid="preview-character">
           <Portrait speaker={state.speaker} portraitId={state.portraitId} expression={state.expression} />
           <div className="relative flex-1 rounded-3xl border-[3px] border-primary bg-panel p-1 shadow-pop">
             <div className="rounded-[20px] border border-line px-5 pb-4 pt-6">
@@ -143,6 +157,13 @@ function PreviewSession() {
               <Star size={18} className="absolute left-10 top-8" /><Star size={12} className="absolute right-24 top-14" /><Moon size={34} className="absolute right-10 top-8" />
               <Leaf size={26} className="absolute bottom-6 right-6" /><Sparkle size={16} className="absolute left-1/3 top-20" />
             </div>
+            {state.status === 'dialogue' && state.displayMode === 'sceneTransition' && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black px-12 text-center" data-testid="preview-scene">
+                <p className="max-w-2xl whitespace-pre-wrap font-serif text-2xl leading-relaxed text-white">{state.text}</p>
+                <Button className="mt-10" autoFocus variant="primary" onClick={() => push(advance(graph, state))}>{t('preview.next')}</Button>
+                <span className="absolute bottom-3 text-[11px] uppercase tracking-wide text-white/50">{t('preview.modeScene')}</span>
+              </div>
+            )}
             <div className="relative flex min-h-0 flex-1 flex-col">
               <Stage
                 state={state}

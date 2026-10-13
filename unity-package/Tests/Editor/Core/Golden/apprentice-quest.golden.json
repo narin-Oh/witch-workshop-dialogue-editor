@@ -11,6 +11,7 @@
       "steps": [
         {
           "kind": "line",
+          "displayMode": "character",
           "displayName": "Pip",
           "text": "Mistress! The moonpetal garden is wilting, and I cannot revive it alone...",
           "portraitId": "pip",
@@ -21,6 +22,7 @@
         },
         {
           "kind": "choices",
+          "displayMode": "",
           "displayName": "",
           "text": "",
           "portraitId": "",
@@ -34,6 +36,7 @@
         },
         {
           "kind": "pick",
+          "displayMode": "",
           "displayName": "",
           "text": "I'll help. Let's start now.",
           "portraitId": "",
@@ -44,6 +47,7 @@
         },
         {
           "kind": "line",
+          "displayMode": "character",
           "displayName": "Pip",
           "text": "Thank you! Please bring me five moonpetals.",
           "portraitId": "pip",
@@ -54,6 +58,7 @@
         },
         {
           "kind": "end",
+          "displayMode": "",
           "displayName": "",
           "text": "",
           "portraitId": "",
@@ -110,6 +115,7 @@
       "steps": [
         {
           "kind": "line",
+          "displayMode": "character",
           "displayName": "Pip",
           "text": "Mistress! The moonpetal garden is wilting, and I cannot revive it alone...",
           "portraitId": "pip",
@@ -120,6 +126,7 @@
         },
         {
           "kind": "choices",
+          "displayMode": "",
           "displayName": "",
           "text": "",
           "portraitId": "",
@@ -133,6 +140,7 @@
         },
         {
           "kind": "pick",
+          "displayMode": "",
           "displayName": "",
           "text": "Not today, Pip.",
           "portraitId": "",
@@ -143,6 +151,7 @@
         },
         {
           "kind": "line",
+          "displayMode": "character",
           "displayName": "Pip",
           "text": "...Okay. I will water them by moonlight, then.",
           "portraitId": "pip",
@@ -153,6 +162,7 @@
         },
         {
           "kind": "end",
+          "displayMode": "",
           "displayName": "",
           "text": "",
           "portraitId": "",
@@ -202,6 +212,18 @@
       "steps": [
         {
           "kind": "line",
+          "displayMode": "narration",
+          "displayName": "",
+          "text": "A soft breeze stirs the wilted petals.",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayMode": "character",
           "displayName": "Pip",
           "text": "Still a few petals short. Keep searching the forest edge!",
           "portraitId": "pip",
@@ -212,6 +234,7 @@
         },
         {
           "kind": "end",
+          "displayMode": "",
           "displayName": "",
           "text": "",
           "portraitId": "",
@@ -275,6 +298,18 @@
       "steps": [
         {
           "kind": "line",
+          "displayMode": "sceneTransition",
+          "displayName": "",
+          "text": "Three days later...",
+          "portraitId": "",
+          "expression": "",
+          "choices": [],
+          "pick": 0,
+          "ending": ""
+        },
+        {
+          "kind": "line",
+          "displayMode": "character",
           "displayName": "Pip",
           "text": "You found them all! The garden is glowing again!",
           "portraitId": "pip",
@@ -285,6 +320,7 @@
         },
         {
           "kind": "end",
+          "displayMode": "",
           "displayName": "",
           "text": "",
           "portraitId": "",

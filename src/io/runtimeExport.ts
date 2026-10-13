@@ -22,7 +22,7 @@ const emptyValue = (): RuntimeTypedValue => toTypedValue('int', 0);
 
 function baseNode(id: string, type: RuntimeNodeType): RuntimeNode {
   return {
-    id, type, speaker: '', displayName: '', text: '', portraitId: '', expression: '', choices: [],
+    id, type, displayMode: '', speaker: '', displayName: '', text: '', portraitId: '', expression: '', choices: [],
     variable: '', operator: '', compare: emptyValue(), nextTrue: '', nextFalse: '',
     operation: '', operand: emptyValue(), eventName: '', eventParams: [], next: '', endingName: '',
   };
@@ -49,11 +49,15 @@ export function exportRuntime(graph: EditorGraph, variables: VariableDef[]): Run
     const r = baseNode(n.id, n.type);
     switch (n.type) {
       case 'dialogue':
-        r.speaker = n.data.speaker;
-        r.displayName = n.data.speakerOverride.trim() || n.data.speaker;
+        r.displayMode = n.data.displayMode;
         r.text = n.data.text;
-        r.portraitId = n.data.portraitId;
-        r.expression = n.data.expression;
+        // Narration / scene text have no speaker or portrait at runtime (the editor keeps the values for switching back).
+        if (n.data.displayMode === 'character') {
+          r.speaker = n.data.speaker;
+          r.displayName = n.data.speakerOverride.trim() || n.data.speaker;
+          r.portraitId = n.data.portraitId;
+          r.expression = n.data.expression;
+        }
         r.next = next(n, 'next');
         break;
       case 'choice':

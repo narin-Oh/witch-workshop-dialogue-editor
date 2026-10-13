@@ -54,6 +54,8 @@ namespace WitchWorkshop.Dialogue
         public string type = "";
 
         // dialogue
+        /// <summary>"character" | "narration" | "sceneTransition". Exports from before this field existed omit it: the default keeps them Character Dialogue.</summary>
+        public string displayMode = "character";
         public string speaker = "";
         public string displayName = "";
         public string text = "";
@@ -110,6 +112,10 @@ namespace WitchWorkshop.Dialogue
         public const string NodeVariable = "variable";
         public const string NodeEvent = "event";
         public const string NodeEnd = "end";
+
+        public const string ModeCharacter = "character";
+        public const string ModeNarration = "narration";
+        public const string ModeSceneTransition = "sceneTransition";
 
         public const string ScopeGlobal = "global";
         public const string ScopeLocal = "local";

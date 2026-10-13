@@ -41,6 +41,8 @@ export interface RuntimeNode {
   id: string;
   type: RuntimeNodeType;
   // dialogue
+  /** "character" | "narration" | "sceneTransition" for dialogue nodes; "" for other node types. */
+  displayMode: string;
   speaker: string;
   /** Resolved name to show: speakerOverride if set, otherwise speaker. */
   displayName: string;

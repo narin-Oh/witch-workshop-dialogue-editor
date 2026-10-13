@@ -89,7 +89,7 @@ export function validateGraph(graph: EditorGraph, variables: VariableDef[]): Val
         break;
       case 'dialogue':
         if (!n.data.text.trim()) add('error', 'DIALOGUE_EMPTY_TEXT', np, ref);
-        if (!n.data.speaker.trim() && !n.data.speakerOverride.trim()) add('warning', 'DIALOGUE_NO_SPEAKER', np, ref);
+        if (n.data.displayMode === 'character' && !n.data.speaker.trim() && !n.data.speakerOverride.trim()) add('warning', 'DIALOGUE_NO_SPEAKER', np, ref);
         if (!connected(n, 'next')) add('error', 'MISSING_NEXT', np, ref);
         break;
       case 'choice': {

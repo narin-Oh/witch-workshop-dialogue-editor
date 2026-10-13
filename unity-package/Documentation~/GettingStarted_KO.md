@@ -210,14 +210,17 @@ Scene
 ```
 Dialogue Manager                           ← DialogueManager, Runner, 저장소, Dispatcher, Resolver
  └─ Dialogue Canvas                        ← Canvas (Screen Space - Overlay, 1280×720 기준 스케일)
-     ├─ Dialogue Panel                     ← DialogueUI  (= Panel Root, 화면 아래 어두운 패널, 클릭하면 "다음")
-     │   ├─ Portrait                       ← 초상화 Image
-     │   ├─ Name Plate                     ← 이름표 (보라색 배경)
-     │   │   └─ Name                       ← 이름 TMP 텍스트
-     │   ├─ Body                           ← 대사 TMP 텍스트
-     │   └─ Continue                       ← "▼" 계속 표시
-     └─ Choices                            ← 선택지 컨테이너 (세로 정렬)
-         └─ Choice Button                  ← 선택지 버튼 템플릿 (비활성, 복제해서 사용)
+     └─ Dialogue UI                        ← DialogueUI  (= Panel Root, 화면 전체 크기의 빈 컨테이너)
+         ├─ Dialogue Panel                 ← 화면 아래 어두운 패널, 클릭하면 "다음"
+         │   ├─ Portrait                   ← 초상화 Image
+         │   ├─ Name Plate                 ← 이름표 (보라색 배경)
+         │   │   └─ Name                   ← 이름 TMP 텍스트
+         │   ├─ Body                       ← 대사 TMP 텍스트
+         │   └─ Continue                   ← "▼" 계속 표시
+         ├─ Choices                        ← 선택지 컨테이너 (세로 정렬)
+         │   └─ Choice Button              ← 선택지 버튼 템플릿 (비활성, 복제해서 사용)
+         └─ Scene Text Overlay             ← 장면 전환 텍스트용 검은 화면 (평소에는 비활성, 클릭하면 "다음")
+             └─ Scene Text                 ← 가운데 흰 글씨 TMP 텍스트
 EventSystem                                ← 없으면 자동 생성
 ```
 
@@ -310,6 +313,39 @@ EventSystem                                ← 없으면 자동 생성
 | **Speaker Styles** | 화자별 스타일 목록. **Match**(표시 이름·화자·초상화 ID와 비교, 대소문자 무시), **Name Color**, **Body Color**, **Name Plate Sprite**. 일치하는 화자의 줄만 색/이름표가 바뀝니다 |
 | **On Shown / On Hidden / On Line Shown / On Choices Shown** | UnityEvent. 효과음, 애니메이션 연결용 |
 
+### 표시 방식: 캐릭터 대사 · 나레이션 · 장면 전환 텍스트
+
+웹 에디터에서 대사 노드마다 고른 **표시 방식**은 JSON의 `displayMode`로 들어오고, 코드에서는 `DialogueLine.Mode`(`Character` / `Narration` / `SceneTransition`)로 전달됩니다. `DialogueUI`는 다음과 같이 보여 줍니다.
+
+| 표시 방식 | `DialogueUI`의 동작 |
+|---|---|
+| **캐릭터 대사** (`Character`) | 이전과 같음: 이름표 + 초상화 + 대사 |
+| **나레이션** (`Narration`) | 내 **일반 대화 패널**에 글만 표시합니다. **이름표(Name Plate Root)가 숨겨지고**, 초상화도 숨겨집니다(앞 대사의 초상화가 남지 않습니다). 화자·초상화 값은 비어 있습니다 |
+| **장면 전환 텍스트** (`SceneTransition`) | **일반 대화 UI를 숨기고**, 별도의 **검은 화면(오버레이)** 가운데에 글을 표시합니다. 플레이어가 **일반 "다음" 입력**(오버레이 클릭, Space/Enter, `OnAdvanceInput()`)을 하면 넘어가고, 다음 대사나 선택지가 나올 때(또는 대화가 끝날 때) 오버레이가 사라지고 **일반 UI가 복원**됩니다 |
+
+> ⚠️ **"10분 후..."는 시간 지연이 아닙니다.** 장면 전환 텍스트는 글자일 뿐이며, 패키지는 어떤 시간도 기다리지 않습니다. 플레이어가 일반 대사와 똑같이 입력해야 넘어갑니다.
+>
+> **이전 내보내기 파일(`displayMode`가 없는 파일)은 그대로 읽히며 *캐릭터 대사*로 재생됩니다.** 새 필드는 기본값이 `"character"`입니다.
+
+**장면 전환 오버레이 연결하기** (`DialogueUI`의 *Scene transition text* 섹션, 모두 선택 사항)
+
+| 필드 | 넣을 것 |
+|---|---|
+| **Scene Overlay Root** | 화면 전체를 덮는 **검은색** 오브젝트(예: 알파 1의 검은 `Image`). 일반 UI와 **별개**여야 합니다 — 숨겨지는 오브젝트 **안에 넣지 마세요**. (평소에는 컴포넌트가 꺼 둡니다) |
+| **Scene Overlay Text** | 오버레이 가운데의 `TMP_Text` |
+| **Scene Advance Button** | (선택) 오버레이 전체를 덮는 `Button` — 클릭하면 다음으로 |
+| **Normal Ui Root** | (선택) 장면 전환 중에 숨길 "일반 대화 UI" 오브젝트 |
+
+장면 전환 중 **무엇을 숨기는지**는 다음 순서로 정해집니다.
+1. **Normal Ui Root**가 지정되어 있으면 그 오브젝트를 숨깁니다.
+2. 아니면 **Panel Root**가 `DialogueUI`가 붙은 오브젝트와 **다른 오브젝트**일 때 Panel Root를 숨깁니다.
+3. 둘 다 아니면(데모 UI가 이 경우) `DialogueUI`가 붙은 오브젝트의 **직계 자식 중 켜져 있는 것**을 숨깁니다(오버레이 제외). 이때 오버레이도 직계 자식이어야 합니다. `DialogueUI`와 **같은 오브젝트에 붙은 그림**(예: 패널 `Image`)은 이 방식으로 숨길 수 없으니, 패널 그림을 자식 오브젝트로 두거나 **Normal Ui Root**를 지정하세요.
+
+- 오버레이가 지정되지 않으면 장면 전환 텍스트는 **일반 패널에 이름표·초상화 없이** 표시되고(콘솔에 경고 1회), Inspector에 안내가 표시됩니다. **Auto-assign**은 `Scene Text Overlay`라는 이름의 자식도 찾습니다.
+- 데모 UI(`Dialogue Manager + Sample UI`)에는 오버레이가 이미 들어 있습니다. 자세한 영문 설명: [`CustomUI.md`](CustomUI.md).
+
+> ⚠️ **Unity에서 아직 확인하지 못한 부분**: 위 동작의 로직(표시 방식 전달, 호환성, 숨김/복원 순서)은 .NET 테스트와 스텁 기반 테스트로 검증했지만, **Unity 에디터에서 컴파일하거나 Play 모드로 실행해 보지는 못했습니다.** 실제 화면(검은 오버레이의 크기·정렬·Canvas 정렬 순서, `SetActive` 전환의 시각적 결과, `JsonUtility`가 `displayMode`가 없는 파일을 기본값 `"character"`로 읽는지)은 직접 확인이 필요합니다. [`TestingStatus.md`](TestingStatus.md)를 보세요.
+
 ### Inspector의 도우미
 
 - `DialogueUI` Inspector 아래쪽에 **아직 지정하지 않은 항목에 대한 경고**가 표시됩니다(예: Body Text 미지정은 빨간 오류).
@@ -340,6 +376,7 @@ EventSystem                                ← 없으면 자동 생성
 | **Choice Button Prefab** | 내 픽셀 아트 선택지 버튼 프리팹 |
 | **Advance Button** | "다음" 버튼 또는 패널을 덮는 투명 버튼 |
 | **Continue Indicator** | 깜빡이는 "다음" 화살표(있다면) |
+| **Scene Overlay Root / Text** | (선택) 장면 전환 텍스트용 검은 화면과 가운데 텍스트 — 8장의 "표시 방식" 참고 |
 
    (자식 이름이 Name/Body/Portrait/Choice/Next 같으면 **Auto-assign empty fields from child names** 버튼이 대부분 채워 줍니다.)
 5. **DialogueManager의 View에 이 `DialogueUI`를 끌어다 놓습니다.**
@@ -619,7 +656,7 @@ public class MySaveVariableStore : VariableStoreBase
 
 Play 중 확인할 것:
 
-1. 시작 트리거(On Start/상호작용/트리거 진입)를 실행하면 패널이 나타나고 첫 대사가 보인다.
+1. 시작 트리거(On Start/상호작용/트리거 진입)를 실행하면 패널이 나타나고 첫 대사가 보인다. (장면 전환 텍스트가 있는 대화라면: 일반 UI가 사라지고 검은 화면에 글이 나타나며, 넘기면 일반 UI가 돌아오는지 확인)
 2. 이름표, 대사, 초상화가 올바르게 나온다. (초상화가 안 나오면 콘솔의 `Portrait ...` 경고를 확인)
 3. 패널 클릭 / Space·Enter로 다음 대사로 넘어간다. 타자기 효과가 켜져 있으면 첫 입력은 줄을 완성한다.
 4. 선택지가 나오면 버튼을 눌러 갈래를 확인한다. 조건 분기는 변수 값을 바꿔서 다시 시험한다(**In-Memory Variable Store의 Seed Values** 이용).
@@ -643,6 +680,8 @@ Inspector에서 실행 로직만 따로 보고 싶다면 `DialogueRunner`의 **L
 | **선택지가 안 나와요 / `cannot show choices; assign Choice Container and Choice Button Prefab.`** | **Choice Container**와 **Choice Button Prefab**을 둘 다 지정하세요. 프리팹에 `Button`과 `TMP_Text`가 있는지 확인하세요. |
 | **선택지 버튼을 눌러도 반응이 없어요** | 씬에 **EventSystem**이 없거나, 새 Input System만 쓰는데 EventSystem에 `Standalone Input Module`이 붙어 있는 경우입니다(`Input System UI Input Module`로 교체). 버튼을 가리는 투명 UI(`Raycast Target`)가 없는지도 확인하세요. |
 | **"다음"이 안 넘어가요** | **Advance Button**을 지정하거나, 기존 Input Manager 사용 시 **Advance With Keys**를 켜세요. 새 Input System이면 `Input System Advance Input` 또는 `OnAdvanceInput()` 호출을 연결하세요. 타자기 효과 중이면 첫 입력은 줄 완성입니다. |
+| **장면 전환 텍스트("10분 후...")가 검은 화면이 아니라 일반 패널에 나와요** | `DialogueUI`의 **Scene Overlay Root**/**Scene Overlay Text**가 지정되지 않았습니다(콘솔에 경고 1회, Inspector에 안내). 8장의 "표시 방식"대로 연결하세요. |
+| **장면 전환 텍스트가 나오는데 오버레이도 같이 사라져요 / 일반 UI가 그대로 보여요** | 오버레이가 숨겨지는 오브젝트 **안에** 들어 있거나, 숨길 대상이 정해지지 않았습니다. 오버레이를 일반 UI **밖**(형제)으로 옮기고 **Normal Ui Root**를 지정하세요. Inspector 경고도 확인하세요. |
 | **글자가 네모(□)로 나와요 (한글)** | TMP 기본 폰트에는 한글이 없습니다. **Window > TextMeshPro > Font Asset Creator**에서 한글 폰트(예: Noto Sans KR, Pretendard)로 **Atlas Population Mode: Dynamic** 폰트 에셋을 만들고, 대사/이름/선택지 TMP 텍스트에 지정하세요. 데모 UI를 쓴다면 **Project Settings > TextMeshPro > Settings**의 **Default Font Asset**을 먼저 바꿔 두세요. |
 | **초상화가 안 나와요** | 콘솔의 `Portrait "id" expression "표정": ...` 경고를 확인하세요. ① 에디터의 초상화 ID와 Portrait Set의 **Portrait Id**가 같은지 ② 리졸버 **Portrait Sets** 목록에 등록했는지 ③ DialogueUI 또는 Manager에 **Portrait Resolver**가 지정되었는지 ④ **Portrait Image**가 지정되었는지 확인하세요. ID가 비어 있는 대사(에디터에서 초상화 ID를 안 적음)는 초상화가 숨겨집니다. |
 | **이벤트가 실행되지 않아요 / `No handler registered for dialogue event "X"`** | 처리기를 등록하지 않았습니다. [12장](#12-게임-이벤트-처리하기) 방법으로 연결하세요. 이름은 **대소문자까지** 에디터와 같아야 합니다. `EventDispatcher`가 Manager에 연결되어 있는지도 확인하세요. |

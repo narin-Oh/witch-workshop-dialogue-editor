@@ -31,6 +31,7 @@
     {
       "id": "n_e5213417-464d-449c-9b7a-21e3ba7e18d7",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "미라",
       "displayName": "미라",
       "text": "안녕하세요! 기침에 잘 듣는 포션이 있을까요?",
@@ -62,6 +63,7 @@
     {
       "id": "n_d639be83-e94e-47b5-86f2-0c570c1d757d",
       "type": "choice",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -104,6 +106,7 @@
     {
       "id": "n_3589f85e-9cdc-412a-ba3c-d34a50a540e7",
       "type": "variable",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -135,6 +138,7 @@
     {
       "id": "n_e4cf290f-09ca-43b9-a8c0-173dc84f083a",
       "type": "event",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -181,6 +185,7 @@
     {
       "id": "n_611cbd43-7c33-416e-8fcc-4ec570d278c4",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -212,6 +217,7 @@
     {
       "id": "n_3150b963-ab7f-490f-b73e-1b246a6236b8",
       "type": "condition",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -243,6 +249,7 @@
     {
       "id": "n_e528430d-e825-43ae-8ce5-613c3a7ee213",
       "type": "event",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -282,6 +289,7 @@
     {
       "id": "n_712bbb8a-80fa-4b21-bec1-e7283ede2061",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",
@@ -313,6 +321,7 @@
     {
       "id": "n_41055815-3bc2-427e-ae46-d44fc22776b2",
       "type": "dialogue",
+      "displayMode": "character",
       "speaker": "루미",
       "displayName": "루미",
       "text": "아직 믿을 만한 손님인지 모르겠어요. 다음에 또 오세요.",
@@ -344,6 +353,7 @@
     {
       "id": "n_e9ca8f11-d3c0-4ae6-b178-e4a729893903",
       "type": "end",
+      "displayMode": "",
       "speaker": "",
       "displayName": "",
       "text": "",

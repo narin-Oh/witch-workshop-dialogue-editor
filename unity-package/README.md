@@ -40,6 +40,8 @@ Details: `Samples~/PotionCustomer/README.md`.
 1. **GameObject > Witch Workshop > Dialogue Manager** adds the manager (runner, variable store, event dispatcher, portrait resolver).
 2. **Connect your UI:** add `DialogueUI` to your dialogue panel and assign your name plate, text, portrait and choice-button prefab.
    Drag it into the manager's **View** field. See [`Documentation~/CustomUI.md`](Documentation~/CustomUI.md).
+   Optional: assign a black full-screen **Scene Overlay** to show *Scene Transition Text* lines (e.g. "10 minutes later...") on a black screen;
+   *Narration* lines need nothing extra (name plate and portrait are hidden). See the "Display modes" section of `CustomUI.md`.
 3. **Portraits:** create a *Portrait Set* per character (portrait ID + one sprite per expression) and add it to the resolver.
    See [`Documentation~/Portraits.md`](Documentation~/Portraits.md).
 4. **Events:** mark game methods with `[DialogueEventHandler("OpenShop")]` or add Inspector bindings.

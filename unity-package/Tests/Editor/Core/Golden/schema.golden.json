@@ -11,6 +11,7 @@
   "nodeFields": [
     "id",
     "type",
+    "displayMode",
     "speaker",
     "displayName",
     "text",

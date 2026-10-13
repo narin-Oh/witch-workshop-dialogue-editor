@@ -40,10 +40,19 @@ Export is **blocked** while the graph has validation errors; warnings can be con
 | `valueType` | `"int"` \| `"bool"` \| `"string"` |
 | `initial` | Local: the starting value. Global: **fallback** only when your game store has no value for that name yet. |
 
+### Dialogue display modes (`displayMode`)
+| value | presentation | speaker / portrait fields |
+|---|---|---|
+| `"character"` | speaker name, portrait and text (default) | as authored |
+| `"narration"` | text in the dialogue panel, no name or portrait | exported empty |
+| `"sceneTransition"` | text centered on a black screen, e.g. "10 minutes later..." | exported empty |
+
+Scene transition text advances with the normal input like any line; it is **not** a timed delay. Exports made before this field existed have no `displayMode`: treat a missing, empty or unknown value as `"character"` (the package's C# class does by default). `schemaVersion` stays `1`.
+
 ### Node types (`type`)
 | type | fields used | behavior |
 |---|---|---|
-| `dialogue` | `speaker`, `displayName`, `text`, `portraitId`, `expression`, `next` | Show a line (`displayName` = override if set, else `speaker`), wait for input, go to `next`. |
+| `dialogue` | `displayMode`, `speaker`, `displayName`, `text`, `portraitId`, `expression`, `next` | Show a line (`displayName` = override if set, else `speaker`), wait for input, go to `next`. `displayMode` selects how it is presented (below). |
 | `choice` | `choices[] { id, text, next }` | Show options; go to the picked choice's `next`. |
 | `condition` | `variable`, `operator`, `compare`, `nextTrue`, `nextFalse` | Evaluate `variable <operator> compare`. Operators: `==` `!=` `>` `<` `>=` `<=` (`bool`/`string` support only `==`/`!=`). |
 | `variable` | `variable`, `operation`, `operand`, `next` | `operation`: `set`, `add`, `subtract` (`add`/`subtract` are int only). Boolean flags use `set`. |
@@ -81,6 +90,7 @@ using System;
 [Serializable] public class DialogueNode {
     public string id;
     public string type;        // dialogue | choice | condition | variable | event | end
+    public string displayMode = "character";   // "character" | "narration" | "sceneTransition" ("" on non-dialogue nodes); older exports omit it
     public string speaker, displayName, text, portraitId, expression;
     public DialogueChoice[] choices;
     public string variable, @operator;

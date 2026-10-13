@@ -24,19 +24,21 @@ export function apprenticeQuestGraph() {
     .say('sulk', 'Pip', '...Okay. I will water them by moonlight, then.', 'sad')
     .end('endDecline', 'Declined')
     .cond('enough', 'moonpetals', '>=', 5)
+    .scene('later', 'Three days later...')
     .say('done', 'Pip', 'You found them all! The garden is glowing again!', 'delighted')
     .event('tea', 'GiveItem', { itemId: 'moonpetal_tea', amount: 3 })
     .event('complete', 'CompleteQuest', { questId: 'moonpetal_garden' })
     .set('reward', 'goldQuest', 'add', 40)
     .event('scene', 'ChangeScene', { sceneName: 'workshop_evening' })
     .end('endDone', 'Quest Complete')
+    .narrate('hush', 'A soft breeze stirs the wilted petals.')
     .say('still', 'Pip', 'Still a few petals short. Keep searching the forest edge!', 'hopeful')
     .end('endKeep', 'Keep Searching');
 
   b.link('start', 'next', 'started').link('started', 'true', 'ask').link('started', 'false', 'enough')
     .link('ask', 'next', 'offer').link('offer', 0, 'startQ').link('offer', 1, 'sulk')
     .link('startQ', 'next', 'flag').link('flag', 'next', 'thanks').link('thanks', 'next', 'endAccept').link('sulk', 'next', 'endDecline')
-    .link('enough', 'true', 'done').link('enough', 'false', 'still')
+    .link('enough', 'true', 'later').link('later', 'next', 'done').link('enough', 'false', 'hush').link('hush', 'next', 'still')
     .link('done', 'next', 'tea').link('tea', 'next', 'complete').link('complete', 'next', 'reward').link('reward', 'next', 'scene').link('scene', 'next', 'endDone')
     .link('still', 'next', 'endKeep');
   return b.build();

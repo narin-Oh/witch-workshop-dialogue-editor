@@ -63,7 +63,7 @@ function playScenario(graph: EditorGraph, project: { variables: VariableDef[] },
   let state: PreviewState = startPreview(graph, project.variables, overridesById);
   const picks = [...(sc.picks ?? [])];
   const steps: Record<string, unknown>[] = [];
-  const blank = { kind: '', displayName: '', text: '', portraitId: '', expression: '', choices: [] as string[], pick: 0, ending: '' };
+  const blank = { kind: '', displayMode: '', displayName: '', text: '', portraitId: '', expression: '', choices: [] as string[], pick: 0, ending: '' };
   for (let guard = 0; guard < 500; guard++) {
     if (state.status === 'error') throw new Error(`Scenario "${sc.name}" hit an error: ${state.error}`);
     if (state.status === 'finished') {
@@ -71,7 +71,7 @@ function playScenario(graph: EditorGraph, project: { variables: VariableDef[] },
       break;
     }
     if (state.status === 'dialogue') {
-      steps.push({ ...blank, kind: 'line', displayName: state.speaker, text: state.text, portraitId: state.portraitId, expression: state.expression });
+      steps.push({ ...blank, kind: 'line', displayMode: state.displayMode, displayName: state.speaker, text: state.text, portraitId: state.portraitId, expression: state.expression });
       state = advance(graph, state);
     } else {
       steps.push({ ...blank, kind: 'choices', choices: state.choices.map((c) => c.text) });

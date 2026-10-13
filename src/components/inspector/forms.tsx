@@ -3,7 +3,7 @@ import { newChoice, paramsForEvent } from '../../model/factory';
 import { newId } from '../../model/ids';
 import { EVENT_CATALOG, findEventSpec } from '../../model/eventCatalog';
 import { operationsFor, operatorsFor, coerceValue, defaultValueFor } from '../../logic/values';
-import type { EditorNode, EventParam, NodeData, VariableDef } from '../../model/types';
+import { DISPLAY_MODES, type DisplayMode, type EditorNode, type EventParam, type NodeData, type VariableDef } from '../../model/types';
 import { TypeSelect, ValueInput } from '../common/ValueInput';
 import { Button, Field, IconButton } from '../ui/primitives';
 import { IconDown, IconPlus, IconTrash, IconUp } from '../ui/Motifs';
@@ -24,15 +24,27 @@ export function StartForm({ data, patch }: { data: Of<'start'>; patch: Patch<Of<
 export function DialogueForm({ data, patch }: { data: Of<'dialogue'>; patch: Patch<Of<'dialogue'>> }) {
   const t = useT();
   const set = <K extends keyof Of<'dialogue'>>(k: K) => (v: Of<'dialogue'>[K]) => patch((d) => ({ ...d, [k]: v }), String(k));
+  const character = data.displayMode === 'character';
   return (
     <>
-      <Field label={t('dialogue.speaker')}><input className="input" value={data.speaker} onChange={(e) => set('speaker')(e.target.value)} placeholder={t('dialogue.speakerPh')} /></Field>
-      <Field label={t('dialogue.override')} hint={t('dialogue.overrideHint')}><input className="input" value={data.speakerOverride} onChange={(e) => set('speakerOverride')(e.target.value)} /></Field>
+      <Field label={t('dialogue.mode')} hint={t(`dialogue.modeHint.${data.displayMode}`)}>
+        <select className="input" aria-label={t('dialogue.mode')} value={data.displayMode} onChange={(e) => patch((d) => ({ ...d, displayMode: e.target.value as DisplayMode }))}>
+          {DISPLAY_MODES.map((m) => <option key={m} value={m}>{t(`dialogue.mode.${m}`)}</option>)}
+        </select>
+      </Field>
+      {character && (
+        <>
+          <Field label={t('dialogue.speaker')}><input className="input" value={data.speaker} onChange={(e) => set('speaker')(e.target.value)} placeholder={t('dialogue.speakerPh')} /></Field>
+          <Field label={t('dialogue.override')} hint={t('dialogue.overrideHint')}><input className="input" value={data.speakerOverride} onChange={(e) => set('speakerOverride')(e.target.value)} /></Field>
+        </>
+      )}
       <Field label={t('dialogue.text')}><textarea className="input min-h-[120px] leading-relaxed" value={data.text} onChange={(e) => set('text')(e.target.value)} /></Field>
-      <div className="grid grid-cols-2 gap-2">
-        <Field label={t('dialogue.portrait')}><input className="input" value={data.portraitId} onChange={(e) => set('portraitId')(e.target.value)} /></Field>
-        <Field label={t('dialogue.expression')}><input className="input" value={data.expression} onChange={(e) => set('expression')(e.target.value)} /></Field>
-      </div>
+      {character && (
+        <div className="grid grid-cols-2 gap-2">
+          <Field label={t('dialogue.portrait')}><input className="input" value={data.portraitId} onChange={(e) => set('portraitId')(e.target.value)} /></Field>
+          <Field label={t('dialogue.expression')}><input className="input" value={data.expression} onChange={(e) => set('expression')(e.target.value)} /></Field>
+        </div>
+      )}
     </>
   );
 }

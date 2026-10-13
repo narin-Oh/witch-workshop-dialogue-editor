@@ -75,6 +75,8 @@ describe('sample conversations', () => {
     const all = new Set([...explore(quest), ...explore(quest, started), ...explore(quest, done)]);
     expect([...all].sort()).toEqual([...QUEST_ENDINGS].sort());
     const s = startPreview(quest, project.variables, done);
-    expect(s.text).toMatch(/found them all/);
+    expect(s.displayMode).toBe('sceneTransition');
+    expect(s.text).toBe('Three days later...');
+    expect(advance(quest, s).text).toMatch(/found them all/);
   });
 });

@@ -43,6 +43,15 @@ namespace WitchWorkshop.Dialogue.Tests
         }
 
         [Test]
+        public void SamplesExportDisplayModes()
+        {
+            var data = TestSupport.LoadDialogue("apprentice-quest.dialogue.json");
+            var modes = data.nodes.Where(n => n.type == "dialogue").Select(n => n.displayMode).Distinct().OrderBy(m => m, StringComparer.Ordinal).ToArray();
+            CollectionAssert.AreEqual(new[] { "character", "narration", "sceneTransition" }, modes);
+            Assert.IsTrue(data.nodes.Where(n => n.type != "dialogue").All(n => n.displayMode == ""), "other node types export an empty displayMode");
+        }
+
+        [Test]
         public void SampleJsonDeserializesWithoutLoss()
         {
             var data = TestSupport.LoadDialogue("potion-customer.dialogue.json");
